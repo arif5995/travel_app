@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:travelapp/ui/widget/item_card.dart';
+import 'package:travelapp/ui/widget/options_card.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -41,18 +43,51 @@ class LayoutBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Stack(
-        children: [
+        children:<Widget> [
           Column(
             children: <Widget>[
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 3.5,
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [Color(0xFF17ead9), Colors.lightBlueAccent])),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [Color(0xFF17ead9), Colors.lightBlueAccent])),
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 90),
+                    child: ListView(
+                      children: <Widget>[
+                        ItemCard(),
+                        ItemCard(),
+                        ItemCard(),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
+          Positioned(
+            top: 100,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: 150,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius:
+                      const BorderRadius.all(Radius.circular(10))),
+                  child: OptionsCards(),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );
