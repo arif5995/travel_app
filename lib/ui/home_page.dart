@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 import 'package:travelapp/ui/widget/item_card.dart';
 import 'package:travelapp/ui/widget/options_card.dart';
 
@@ -38,7 +39,21 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class LayoutBody extends StatelessWidget {
+class LayoutBody extends StatefulWidget {
+  @override
+  _LayoutBodyState createState() => _LayoutBodyState();
+}
+
+class _LayoutBodyState extends State<LayoutBody> {
+  RateMyApp _rateMyApp = RateMyApp(
+    preferencesPrefix: 'rateMyApp_',
+    minDays: 3,
+    minLaunches: 7,
+    remindDays: 2,
+    remindLaunches: 5,
+    // appStoreIdentifier: '',
+    // googlePlayIdentifier: '',
+  );
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -93,3 +108,4 @@ class LayoutBody extends StatelessWidget {
     );
   }
 }
+
