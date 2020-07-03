@@ -88,13 +88,7 @@ class _LayoutBodyState extends State<LayoutBody> {
                   color: Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 90),
-                    child:
-//                      ListView(
-//                        children: <Widget>[
-//                          ItemCard(txtPicture: Gambar.img1, txtPlaceName: "Nama tempat", txtPrice: "100",)
-//                        ],
-//                      )
-                    ListView.builder(
+                    child:ListView.builder(
                       itemCount: _itemCards.length,
                       itemBuilder: (context,index){
                         return new ItemCard(txtPicture: _itemCards[index].gambar, txtPlaceName: _itemCards[index].tempat, txtPrice: _itemCards[index].harga);
@@ -116,7 +110,7 @@ class _LayoutBodyState extends State<LayoutBody> {
                   shape: RoundedRectangleBorder(
                       borderRadius:
                       const BorderRadius.all(Radius.circular(10))),
-                  child: OptionsCards(),
+                  child: OptionsCards(txtBtnDialog: "SIGN ME UP",),
                 ),
               ),
             ),

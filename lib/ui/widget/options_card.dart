@@ -1,7 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:travelapp/ui/widget/dialog_popup.dart';
 
 class OptionsCards extends StatelessWidget {
+  final Function onPressDialog;
+  final String txtBtnDialog;
+
+  OptionsCards({this.onPressDialog, this.txtBtnDialog});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -69,7 +74,7 @@ class OptionsCards extends StatelessWidget {
                 child: ButtonColor(
                     text: "Edit Search",
                     onPress: (){
-
+                        showDialog(context: context, builder: (BuildContext context) => BuildAboutDialog(context, onPressDialog, txtBtnDialog));
                     }
                 ),
               ),
@@ -80,6 +85,8 @@ class OptionsCards extends StatelessWidget {
     );
   }
 }
+
+
 
 Widget ButtonText({String text, IconData icon, GestureTapCallback onPress}){
   return RawMaterialButton(
