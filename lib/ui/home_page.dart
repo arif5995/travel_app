@@ -5,9 +5,11 @@ import 'package:travelapp/ui/widget/item_card.dart';
 import 'package:travelapp/ui/widget/options_card.dart';
 
 class HomePage extends StatelessWidget {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         centerTitle: true,
         flexibleSpace: Container(
@@ -35,12 +37,15 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      body: LayoutBody(),
+      body: LayoutBody(scaffoldKey: scaffoldKey,),
     );
   }
 }
 
 class LayoutBody extends StatefulWidget {
+  final GlobalKey scaffoldKey;
+
+  LayoutBody({this.scaffoldKey});
   @override
   _LayoutBodyState createState() => _LayoutBodyState();
 }
@@ -52,6 +57,7 @@ class ItemList{
 }
 
 class _LayoutBodyState extends State<LayoutBody> {
+
   RateMyApp _rateMyApp = RateMyApp(
     preferencesPrefix: 'rateMyApp_',
     minDays: 3,
@@ -88,13 +94,7 @@ class _LayoutBodyState extends State<LayoutBody> {
                   color: Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 90),
-                    child:
-//                      ListView(
-//                        children: <Widget>[
-//                          ItemCard(txtPicture: Gambar.img1, txtPlaceName: "Nama tempat", txtPrice: "100",)
-//                        ],
-//                      )
-                    ListView.builder(
+                    child:ListView.builder(
                       itemCount: _itemCards.length,
                       itemBuilder: (context,index){
                         return new ItemCard(txtPicture: _itemCards[index].gambar, txtPlaceName: _itemCards[index].tempat, txtPrice: _itemCards[index].harga);
@@ -116,7 +116,7 @@ class _LayoutBodyState extends State<LayoutBody> {
                   shape: RoundedRectangleBorder(
                       borderRadius:
                       const BorderRadius.all(Radius.circular(10))),
-                  child: OptionsCards(),
+                  child: OptionsCards(txtBtnDialog: "SIGN ME UP"),
                 ),
               ),
             ),
