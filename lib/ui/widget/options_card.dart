@@ -7,6 +7,7 @@ class OptionsCards extends StatelessWidget {
   final String txtBtnDialog;
 
   OptionsCards({this.onPressDialog, this.txtBtnDialog});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -21,28 +22,23 @@ class OptionsCards extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: ButtonText(
-                  text: "First Class",
-                  icon: Icons.star,
-                  onPress: null
-                ),
+                    text: "First Class", icon: Icons.star, onPress: null),
               ),
-
               Expanded(
                 flex: 1,
                 child: ButtonText(
-                    text: "800 E",
-                    icon: Icons.monetization_on,
-                    onPress: null
-                ),
+                    text: "800 E", icon: Icons.monetization_on, onPress: null),
               ),
-
               Expanded(
                 flex: 1,
                 child: ButtonText(
                     text: "1 Passenger",
                     icon: Icons.person,
-                    onPress: null
-                ),
+                    onPress: () {
+                      showBottomSheet(
+                          context: context,
+                          builder: (context) => _bottomSheet(context));
+                    }),
               ),
             ],
           ),
@@ -55,28 +51,24 @@ class OptionsCards extends StatelessWidget {
                 child: ButtonText(
                     text: "Dubai, UAE",
                     icon: Icons.location_on,
-                    onPress: (){
-
-                    }
-                ),
+                    onPress: () {}),
               ),
               Expanded(
                 flex: 1,
                 child: ButtonText(
-                    text: "Mar, 7.2017",
-                    icon: Icons.date_range,
-                    onPress: null
-                ),
+                    text: "Mar, 7.2017", icon: Icons.date_range, onPress: null),
               ),
-
               Expanded(
                 flex: 1,
                 child: ButtonColor(
                     text: "Edit Search",
-                    onPress: (){
-                        showDialog(context: context, builder: (BuildContext context) => BuildAboutDialog(context, onPressDialog, txtBtnDialog));
-                    }
-                ),
+                    onPress: () {
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) => BuildAboutDialog(
+                              context, onPressDialog, txtBtnDialog));
+                    }),
               ),
             ],
           ),
@@ -86,14 +78,13 @@ class OptionsCards extends StatelessWidget {
   }
 }
 
-
-
-Widget ButtonText({String text, IconData icon, GestureTapCallback onPress}){
+Widget ButtonText({String text, IconData icon, GestureTapCallback onPress}) {
   return RawMaterialButton(
     onPressed: onPress,
     splashColor: Colors.grey,
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(18.0),),
+      borderRadius: BorderRadius.circular(18.0),
+    ),
     child: Padding(
       padding: const EdgeInsets.all(5),
       child: Row(
@@ -119,14 +110,14 @@ Widget ButtonText({String text, IconData icon, GestureTapCallback onPress}){
   );
 }
 
-
-Widget ButtonColor({String text, GestureTapCallback onPress}){
+Widget ButtonColor({String text, GestureTapCallback onPress}) {
   return RawMaterialButton(
     fillColor: Colors.blue,
     onPressed: onPress,
     splashColor: Colors.grey,
     shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18.0),),
+      borderRadius: BorderRadius.circular(18.0),
+    ),
     child: Padding(
       padding: const EdgeInsets.all(10.0),
       child: Row(
@@ -141,4 +132,38 @@ Widget ButtonColor({String text, GestureTapCallback onPress}){
       ),
     ),
   );
+}
+
+_bottomSheet(BuildContext context) {
+  showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.5,
+          decoration: BoxDecoration(
+            color: Colors.blueGrey,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24.0),
+              topRight: Radius.circular(24.0),
+            ),
+          ),
+          child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.photo),
+              title: Text("Photos"),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.camera),
+              title: Text("Camera"),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.videocam),
+              title: Text("Video"),
+              onTap: () {},
+            ),
+          ]),
+        );
+      });
 }

@@ -14,7 +14,9 @@ Dialog BuildAboutDialog(BuildContext context, Function onPress, String txtBtn){
           children: <Widget>[
             Align(
               alignment: Alignment.topRight,
-                child: Icon(Icons.close)),
+                child: InkWell(
+                  onTap: ()=> Navigator.pop(context, true),
+                    child: Icon(Icons.close))),
             SizedBox(
               height: 10,
             ),
