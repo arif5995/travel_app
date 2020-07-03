@@ -34,11 +34,7 @@ class OptionsCards extends StatelessWidget {
                 child: ButtonText(
                     text: "1 Passenger",
                     icon: Icons.person,
-                    onPress: () {
-                      showBottomSheet(
-                          context: context,
-                          builder: (context) => _bottomSheet(context));
-                    }),
+                    onPress: () => _bottomSheet(context)),
               ),
             ],
           ),
@@ -136,31 +132,48 @@ Widget ButtonColor({String text, GestureTapCallback onPress}) {
 
 _bottomSheet(BuildContext context) {
   showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(24.0),
+        topRight: Radius.circular(24.0),
+      )),
+      backgroundColor: Colors.white,
       context: context,
       builder: (context) {
         return Container(
           height: MediaQuery.of(context).size.height * 0.5,
-          decoration: BoxDecoration(
-            color: Colors.blueGrey,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(24.0),
-              topRight: Radius.circular(24.0),
-            ),
-          ),
+          color: Colors.transparent,
+//          decoration: BoxDecoration(
+//            color: Colors.white,
+//            borderRadius: BorderRadius.only(
+//              topLeft: Radius.circular(24.0),
+//              topRight: Radius.circular(24.0),
+//            ),
+//          ),
           child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Text(
+                  "Daftar Nama",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
             ListTile(
-              leading: Icon(Icons.photo),
-              title: Text("Photos"),
+              leading: Icon(Icons.person),
+              title: Text("Muhammad Arif"),
               onTap: () {},
             ),
             ListTile(
-              leading: Icon(Icons.camera),
-              title: Text("Camera"),
+              leading: Icon(Icons.person),
+              title: Text("Jihan Ardilla"),
               onTap: () {},
             ),
             ListTile(
-              leading: Icon(Icons.videocam),
-              title: Text("Video"),
+              leading: Icon(Icons.person),
+              title: Text("Ayu"),
               onTap: () {},
             ),
           ]),
