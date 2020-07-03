@@ -1,11 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:travelapp/core/string/string.dart';
+import 'package:travelapp/ui/widget/star_rating.dart';
 
 class ItemCard extends StatelessWidget {
-  final String textImg;
+  final String txtPicture, txtPlaceName, txtPrice;
+  final Function onChanged;
 
-  const ItemCard({Key key, this.textImg}) : super(key: key);
+  ItemCard({this.txtPicture, this.txtPlaceName, this.txtPrice, this.onChanged});
+
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -18,47 +23,87 @@ class ItemCard extends StatelessWidget {
           ),
           child: Row(
             children: <Widget>[
-              Container(
-                width: MediaQuery.of(context).size.width * 0.4,
-                height: MediaQuery.of(context).size.height,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8.0),
-                    bottomLeft: Radius.circular(8.0),
-                  ),
-                  child: Image.network(
-                    Gambar.img3,
-                    fit: BoxFit.fill,
+              Expanded(
+                flex: 1,
+                child: Container(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.4,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      bottomLeft: Radius.circular(8.0),
+                    ),
+                    child: CachedNetworkImage(
+                        imageUrl: txtPicture,
+                        fit: BoxFit.fill,
+                    )
+
+//                    Image.network(
+//                      txtPicture,
+//                      fit: BoxFit.fill,
+//                    ),
                   ),
                 ),
               ),
               SizedBox(
                 width: 5,
               ),
-              Padding(
-                padding: const EdgeInsets.all(5.0),
+              Expanded(
+                flex: 2,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Text("Bali", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                        SizedBox(
-                          width: 110,
-                        ),
-                        Icon(
-                          Icons.favorite, color: Colors.grey,
-                        ),
-                      ],
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: StarRating(
+                        onChanged: onChanged,
+                        value: 0,
+                        unfilledStar: Icons.star_border,
+                        filledStar: Icons.star,
+                      ),
                     ),
-                    Text("nama Tempat", style: TextStyle(fontSize: 12),),
-                    SizedBox(
-                      height: 30,
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(txtPlaceName, style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold
+                            ),)
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 5),
+                            child: Align(
+                              alignment: Alignment.topRight,
+                              child: Icon(
+                                Icons.favorite, color: Colors.pink,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                     Align(
-                      alignment: Alignment.centerRight,
-                      child: Container(
-                        child: Text("Harga", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                      alignment: Alignment.bottomRight,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 5, top: 10, bottom: 5),
+                        child: Text(
+                          txtPrice,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                            fontSize: 15
+                          ),
+                        ),
                       ),
                     )
                   ],

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:rate_my_app/rate_my_app.dart';
+import 'package:travelapp/core/string/string.dart';
 import 'package:travelapp/ui/widget/item_card.dart';
 import 'package:travelapp/ui/widget/options_card.dart';
 
@@ -38,7 +40,33 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class LayoutBody extends StatelessWidget {
+class LayoutBody extends StatefulWidget {
+  @override
+  _LayoutBodyState createState() => _LayoutBodyState();
+}
+
+class ItemList{
+  final String gambar, tempat, harga;
+
+  ItemList({this.gambar, this.tempat, this.harga});
+}
+
+class _LayoutBodyState extends State<LayoutBody> {
+  RateMyApp _rateMyApp = RateMyApp(
+    preferencesPrefix: 'rateMyApp_',
+    minDays: 3,
+    minLaunches: 7,
+    remindDays: 2,
+    remindLaunches: 5,
+    // appStoreIdentifier: '',
+    // googlePlayIdentifier: '',
+  );
+
+  final List<ItemList> _itemCards = [
+     ItemList(gambar: Gambar.img1, tempat: "Bali", harga: "7000"),
+     ItemList(gambar: Gambar.img2, tempat: "Autrslia", harga: "17000"),
+     ItemList(gambar: Gambar.img3, tempat: "Roma", harga: "71000"),
+  ];
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -60,12 +88,17 @@ class LayoutBody extends StatelessWidget {
                   color: Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 90),
-                    child: ListView(
-                      children: <Widget>[
-                        ItemCard(),
-                        ItemCard(),
-                        ItemCard(),
-                      ],
+                    child:
+//                      ListView(
+//                        children: <Widget>[
+//                          ItemCard(txtPicture: Gambar.img1, txtPlaceName: "Nama tempat", txtPrice: "100",)
+//                        ],
+//                      )
+                    ListView.builder(
+                      itemCount: _itemCards.length,
+                      itemBuilder: (context,index){
+                        return new ItemCard(txtPicture: _itemCards[index].gambar, txtPlaceName: _itemCards[index].tempat, txtPrice: _itemCards[index].harga);
+                      },
                     ),
                   ),
                 ),
@@ -93,3 +126,4 @@ class LayoutBody extends StatelessWidget {
     );
   }
 }
+
