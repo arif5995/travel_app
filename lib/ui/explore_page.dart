@@ -51,10 +51,10 @@ class _ExplorePageState extends State<ExplorePage> {
             SizedBox(
               height: 15,
             ),
-            _titleList("Populer Tours"),
             Expanded(
                 child: ListView(
                  children: <Widget>[
+                   _titleList("Populer Tours"),
                    _listViewPopulersTours(),
                    _titleList("New Offers Tours"),
                    _listViewPopulersTours(),
