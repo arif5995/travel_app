@@ -77,11 +77,11 @@ class _ExplorePageState extends State<ExplorePage> {
                    boolRight: pressRight,
                    onPressLeft: (){
                      onPressedRight();
-                     _populersToursRight(-3);
+                     _populersTours(-3);
                    },
                    onPressRight: (){
                      onPressedLeft();
-                     _populersToursRight(3);
+                     _populersTours(3);
                    }
                  ),
                  _listViewPopulersTours(),
@@ -91,9 +91,11 @@ class _ExplorePageState extends State<ExplorePage> {
                      boolRight: pressRight,
                      onPressLeft: (){
                        onPressedRight();
+                       _offersTours(-3);
                      },
                      onPressRight: (){
                        onPressedLeft();
+                       _offersTours(3);
                      }
                  ),
                  _listViewOffersTours(),
@@ -103,9 +105,11 @@ class _ExplorePageState extends State<ExplorePage> {
                      boolRight: pressRight,
                      onPressLeft: (){
                        onPressedRight();
+                       _bestDestination(-3);
                      },
                      onPressRight: (){
                        onPressedLeft();
+                       _bestDestination(3);
                      }
                  ),
                  _listViewBestDestination()
@@ -116,7 +120,9 @@ class _ExplorePageState extends State<ExplorePage> {
     );
   }
 
-  _populersToursRight(i) => _controller1.animateTo(100.0 * i, duration: Duration(seconds: 2), curve: Curves.fastOutSlowIn);
+  _populersTours(i) => _controller1.animateTo(100.0 * i, duration: Duration(seconds: 2), curve: Curves.fastOutSlowIn);
+  _offersTours(i) => _controller2.animateTo(100.0 * i, duration: Duration(seconds: 2), curve: Curves.fastOutSlowIn);
+  _bestDestination(i) => _controller3.animateTo(100.0 * i, duration: Duration(seconds: 2), curve: Curves.fastOutSlowIn);
 
   SizedBox _listViewPopulersTours() {
     return SizedBox(
