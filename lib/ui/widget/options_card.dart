@@ -61,7 +61,7 @@ class OptionsCards extends StatelessWidget {
                     onPress: () {
                       showDialog(
                           context: context,
-                          barrierDismissible: false,
+//                          barrierDismissible: false,
                           builder: (BuildContext context) => BuildAboutDialog(
                               context, onPressDialog, txtBtnDialog));
                     }),
