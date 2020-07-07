@@ -77,6 +77,7 @@ class _ExplorePageState extends State<ExplorePage> {
                    boolRight: pressRight,
                    onPressLeft: (){
                      onPressedRight();
+                     _populersToursRight(-3);
                    },
                    onPressRight: (){
                      onPressedLeft();
