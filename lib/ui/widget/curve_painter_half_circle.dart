@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CurvePainter extends CustomPainter {
@@ -5,17 +6,21 @@ class CurvePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint();
-    paint.color = Colors.blue[300];
+    final shapeBounds = Rect.fromLTRB(0, 0, size.width, size.height);
+    final colors = [Color(0xFF17ead9), Colors.lightBlueAccent];
+    final stops = [0.0, 1.0];
+    final gradient = LinearGradient(colors: colors, stops: stops);
+    final paints = Paint()..shader = gradient.createShader(shapeBounds);
     paint.style = PaintingStyle.fill;
 
     var path = Path();
     path.moveTo(0, size.height * 0.25);
-    path.quadraticBezierTo(size.width / 2, size.height / 2, size.width, size.height * 0.25);
+    path.quadraticBezierTo(size.width / 2, size.height * 0.4, size.width, size.height * 0.25);
 
     path.lineTo(size.width, 0);
     path.lineTo(0, 0);
 
-    canvas.drawPath(path, paint);
+    canvas.drawPath(path, paints);
 
   }
 
