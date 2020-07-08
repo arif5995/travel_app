@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travelapp/core/model/toursMdl.dart';
 import 'package:travelapp/core/string/dataTours.dart';
+import 'package:travelapp/ui/widget/appbar.dart';
 import 'package:travelapp/ui/widget/star_rating.dart';
 import 'package:travelapp/ui/widget/title_explore.dart';
 
@@ -42,27 +43,7 @@ class _ExplorePageState extends State<ExplorePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF17ead9), Colors.lightBlueAccent],
-            ),
-          ),
-        ),
-        title: Text(
-          "Explore",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: 'Banana',
-            fontSize: 25.0,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+      appBar: AppBarTop(title: "Explore", icon: null, textRight: ""),
       body: Column(
         children: <Widget>[
           SizedBox(

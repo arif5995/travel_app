@@ -1,39 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:travelapp/ui/widget/appbar.dart';
 import 'package:travelapp/ui/widget/curve_painter_half_circle.dart';
 
 class ProfilPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF17ead9), Colors.lightBlueAccent],
-            ),
-          ),
-        ),
-        title: Text(
-          "Edit Profile",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: 'Banana',
-            fontSize: 25.0,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        actions: <Widget>[
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 15),
-              child: Text("Apply", style: TextStyle(fontSize: 12, color: Colors.white),),
-            ),
-          ),
-        ],
-      ),
+      appBar: AppBarTop(title: "Explore", textRight: "Apply"),
       body: SingleChildScrollView(
         child: CustomPaint(
           painter: CurvePainter(),
