@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 Container SearchText(){
   return Container(
+      alignment: Alignment.center,
       height: 60,
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Card(

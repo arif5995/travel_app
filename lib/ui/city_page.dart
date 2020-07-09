@@ -36,7 +36,7 @@ class _LayoutBodyCityState extends State<LayoutBodyCity> {
         child: Stack(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.only(top: 180),
+          padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.20 + 30,),
           child: ListView.builder(
               itemCount: _tours.length,
               itemBuilder: (context, index) {
