@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:travelapp/ui/city_page.dart';
 import 'package:travelapp/ui/explore_page.dart';
 import 'package:travelapp/ui/home_page.dart';
 import 'package:travelapp/ui/profil_page.dart';
-import 'package:travelapp/ui/tours_page.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -16,7 +16,7 @@ class _DashboardPageState extends State<DashboardPage> {
   //List screen page
   List<Widget> pageList = [
     HomePage(),
-    ToursPage(),
+    CityPage(),
     ExplorePage(),
     ProfilPage()
   ];
@@ -29,7 +29,7 @@ class _DashboardPageState extends State<DashboardPage> {
     ),
     BottomNavigationBarItem(
         icon: Icon(Icons.business_center),
-        title: Text("Tours")
+        title: Text("Citys")
     ),
     BottomNavigationBarItem(
         icon: Icon(Icons.search),

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:travelapp/ui/city_page.dart';
 import 'package:travelapp/ui/dashboard_page.dart';
 import 'package:travelapp/ui/explore_page.dart';
 import 'package:travelapp/ui/home_page.dart';
 import 'package:travelapp/ui/profil_page.dart';
-import 'package:travelapp/ui/tours_page.dart';
 
 const String homeRoute = '/homePage';
-const String toursRoute = '/toursPage';
+const String cityRoute = '/cityPage';
 const String explorRoute = '/explorePage';
 const String profilRoute = '/profilPage';
 const String dasbordRoute = '/profilPage';
@@ -18,8 +18,8 @@ class Router {
         return MaterialPageRoute(builder: (_) => DashboardPage());
       case homeRoute:
         return MaterialPageRoute(builder: (_) => HomePage());
-      case toursRoute:
-        return MaterialPageRoute(builder: (_) => ToursPage());
+      case cityRoute:
+        return MaterialPageRoute(builder: (_) => CityPage());
       case explorRoute :
         return MaterialPageRoute(builder: (_) => ExplorePage());
       case profilRoute :
