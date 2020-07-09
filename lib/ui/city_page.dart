@@ -47,18 +47,18 @@ class _LayoutBodyCityState extends State<LayoutBodyCity> {
                 );
               }),
         ),
-        Container(
-          height: MediaQuery.of(context).size.height * 0.20,
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [Hexcolor("#39ACFC"), Hexcolor("#33B8F3")])),
-        ),
-        Positioned(
-          top: 130,
-          right: 0.0,
-          left: 0.0,
-          child: Center(child: SearchText()),
-        ),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.20,
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [Hexcolor("#39ACFC"), Hexcolor("#33B8F3")])),
+          ),
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.20 - 30,
+            right: 0.0,
+            left: 0.0,
+            child: SearchText(),
+          ),
       ],
     ));
   }
