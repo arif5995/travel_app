@@ -54,7 +54,7 @@ class _LayoutBodyCityState extends State<LayoutBodyCity> {
                   colors: [Hexcolor("#39ACFC"), Hexcolor("#33B8F3")])),
         ),
         Positioned(
-          top: 120,
+          top: 130,
           right: 0.0,
           left: 0.0,
           child: Center(child: SearchText()),
