@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:travelapp/core/model/city/collectionss.dart';
 import 'package:travelapp/core/model/toursMdl.dart';
-import 'package:travelapp/core/string/dataTours.dart';
+import 'package:travelapp/core/repositories/city_repo..dart';
+import 'package:travelapp/core/repositories/city_repositories.dart';
 import 'package:travelapp/ui/widget/appbar.dart';
 import 'package:travelapp/ui/widget/item_list_citys.dart';
 import 'package:travelapp/ui/widget/search_text.dart';
@@ -23,11 +25,48 @@ class LayoutBodyCity extends StatefulWidget {
 
 class _LayoutBodyCityState extends State<LayoutBodyCity> {
   List<ToursMdl> _tours;
+  Collectionss collectionss;
+  var collectionLoad = false;
+
+  getCollection(){
+    setState(() {
+      collectionLoad = false;
+    });
+     ServiceCity.getCollection().then((value){
+      setState(() {
+        collectionss = value;
+        print ("Counter  ${collectionss.collectionss.length}");
+        if (collectionss.collectionss.length > 0) {
+          collectionLoad = true;
+        } else {
+          collectionLoad = false;
+        }
+      });
+    });
+  }
+
+  getListCity(){
+    setState(() {
+      collectionLoad = false;
+    });
+    CityRepo.getCityCollection().then((value){
+      setState(() {
+        collectionss = value;
+        print("Counter ${collectionss.collectionss.length}");
+        if (collectionss.collectionss.length > 0){
+          collectionLoad = true;
+        } else {
+          collectionLoad = false;
+        }
+      });
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    _tours = ToursData.getData();
+    getCollection();
+   // getListCity();
   }
 
   @override
@@ -37,15 +76,21 @@ class _LayoutBodyCityState extends State<LayoutBodyCity> {
       children: <Widget>[
         Container(
           padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.20 + 30,),
-          child: ListView.builder(
-              itemCount: _tours.length,
-              itemBuilder: (context, index) {
-                var item = _tours[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  child: ItemListCitys(itemImg: item.image, itemTitle: item.title),
-                );
-              }),
+          child: ListView(
+            children: <Widget>[
+              collectionLoad ? ListView.builder(
+                  itemCount: collectionss.collectionss.length,
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    var item = collectionss.collectionss[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      child: ItemListCitys(itemImg: item.collection.imageUrl, itemTitle: item.collection.title),
+                    );
+                  }) : SizedBox(),
+            ],
+          )
         ),
           Container(
             height: MediaQuery.of(context).size.height * 0.20,
