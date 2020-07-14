@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:travelapp/core/bloc/citys_bloc.dart';
 import 'package:travelapp/core/model/city/collectionss.dart';
+import 'package:travelapp/core/model/citys_model.dart';
 import 'package:travelapp/core/model/toursMdl.dart';
-import 'package:travelapp/core/repositories/city_repo..dart';
+import 'package:travelapp/core/repositories/city_repo.dart';
 import 'package:travelapp/core/repositories/city_repositories.dart';
 import 'package:travelapp/ui/widget/appbar.dart';
 import 'package:travelapp/ui/widget/item_list_citys.dart';
@@ -25,35 +27,18 @@ class LayoutBodyCity extends StatefulWidget {
 
 class _LayoutBodyCityState extends State<LayoutBodyCity> {
   List<ToursMdl> _tours;
-  Collectionss collectionss;
+  List<CollectionElement> collections;
   var collectionLoad = false;
 
-  getCollection(){
+  getDataCity(){
     setState(() {
       collectionLoad = false;
     });
-     ServiceCity.getCollection().then((value){
+    blocCity.fetchCities().then((value) {
       setState(() {
-        collectionss = value;
-        print ("Counter  ${collectionss.collectionss.length}");
-        if (collectionss.collectionss.length > 0) {
-          collectionLoad = true;
-        } else {
-          collectionLoad = false;
-        }
-      });
-    });
-  }
-
-  getListCity(){
-    setState(() {
-      collectionLoad = false;
-    });
-    CityRepo.getCityCollection().then((value){
-      setState(() {
-        collectionss = value;
-        print("Counter ${collectionss.collectionss.length}");
-        if (collectionss.collectionss.length > 0){
+        collections = value;
+        print("Counter ${collections.length}");
+        if (collections.length > 0){
           collectionLoad = true;
         } else {
           collectionLoad = false;
@@ -64,9 +49,15 @@ class _LayoutBodyCityState extends State<LayoutBodyCity> {
 
   @override
   void initState() {
+    //getDataCity();
+    blocCity.fetchCities();
     super.initState();
-    getCollection();
-   // getListCity();
+  }
+
+  @override
+  void dispose() {
+    blocCity.dispose();
+    super.dispose();
   }
 
   @override
@@ -76,21 +67,28 @@ class _LayoutBodyCityState extends State<LayoutBodyCity> {
       children: <Widget>[
         Container(
           padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.20 + 30,),
-          child: ListView(
-            children: <Widget>[
-              collectionLoad ? ListView.builder(
-                  itemCount: collectionss.collectionss.length,
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    var item = collectionss.collectionss[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                      child: ItemListCitys(itemImg: item.collection.imageUrl, itemTitle: item.collection.title),
-                    );
-                  }) : SizedBox(),
-            ],
-          )
+          child: StreamBuilder<List<CollectionElement>>(
+              stream: blocCity.cities,
+              builder: (context, AsyncSnapshot<List<CollectionElement>> snapshot) {
+                if (snapshot.hasData){
+                  return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        var item = snapshot.data[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                          child: ItemListCitys(itemImg: item.collection.imageUrl, itemTitle: item.collection.title),
+                        );
+                      });
+                }else if(snapshot.hasError) {
+                  return Text(snapshot.error.toString());
+                }return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+          ),
         ),
           Container(
             height: MediaQuery.of(context).size.height * 0.20,

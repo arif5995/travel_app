@@ -1,68 +1,73 @@
-class Citys {
-  List<Collections> collections;
+
+import 'dart:convert';
+
+City cityFromJson(String str) => City.fromJson(json.decode(str));
+
+String cityToJson(City data) => json.encode(data.toJson());
+
+class City {
+  City({
+    this.collections,
+    this.hasMore,
+    this.shareUrl,
+    this.displayText,
+    this.hasTotal,
+    this.userHasAddresses,
+  });
+
+  List<CollectionElement> collections;
   int hasMore;
   String shareUrl;
   String displayText;
   int hasTotal;
   bool userHasAddresses;
 
-  Citys(
-      {this.collections,
-        this.hasMore,
-        this.shareUrl,
-        this.displayText,
-        this.hasTotal,
-        this.userHasAddresses});
+  factory City.fromJson(Map<String, dynamic> json) => City(
+    collections: List<CollectionElement>.from(json["collections"].map((x) => CollectionElement.fromJson(x))),
+    hasMore: json["has_more"],
+    shareUrl: json["share_url"],
+    displayText: json["display_text"],
+    hasTotal: json["has_total"],
+    userHasAddresses: json["user_has_addresses"],
+  );
 
-  Citys.fromJson(Map<String, dynamic> json) {
-    if (json['collections'] != null) {
-      collections = new List<Collections>();
-      json['collections'].forEach((v) {
-        collections.add(new Collections.fromJson(v));
-      });
-    }
-    hasMore = json['has_more'];
-    shareUrl = json['share_url'];
-    displayText = json['display_text'];
-    hasTotal = json['has_total'];
-    userHasAddresses = json['user_has_addresses'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.collections != null) {
-      data['collections'] = this.collections.map((v) => v.toJson()).toList();
-    }
-    data['has_more'] = this.hasMore;
-    data['share_url'] = this.shareUrl;
-    data['display_text'] = this.displayText;
-    data['has_total'] = this.hasTotal;
-    data['user_has_addresses'] = this.userHasAddresses;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "collections": List<dynamic>.from(collections.map((x) => x.toJson())),
+    "has_more": hasMore,
+    "share_url": shareUrl,
+    "display_text": displayText,
+    "has_total": hasTotal,
+    "user_has_addresses": userHasAddresses,
+  };
 }
 
-class Collections {
-  Collection collection;
+class CollectionElement {
+  CollectionElement({
+    this.collection,
+  });
 
-  Collections({this.collection});
+  CollectionCollection collection;
 
-  Collections.fromJson(Map<String, dynamic> json) {
-    collection = json['collection'] != null
-        ? new Collection.fromJson(json['collection'])
-        : null;
-  }
+  factory CollectionElement.fromJson(Map<String, dynamic> json) => CollectionElement(
+    collection: CollectionCollection.fromJson(json["collection"]),
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.collection != null) {
-      data['collection'] = this.collection.toJson();
-    }
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "collection": collection.toJson(),
+  };
 }
 
-class Collection {
+class CollectionCollection {
+  CollectionCollection({
+    this.collectionId,
+    this.resCount,
+    this.imageUrl,
+    this.url,
+    this.title,
+    this.description,
+    this.shareUrl,
+  });
+
   int collectionId;
   int resCount;
   String imageUrl;
@@ -71,34 +76,23 @@ class Collection {
   String description;
   String shareUrl;
 
-  Collection(
-      {this.collectionId,
-        this.resCount,
-        this.imageUrl,
-        this.url,
-        this.title,
-        this.description,
-        this.shareUrl});
+  factory CollectionCollection.fromJson(Map<String, dynamic> json) => CollectionCollection(
+    collectionId: json["collection_id"],
+    resCount: json["res_count"],
+    imageUrl: json["image_url"],
+    url: json["url"],
+    title: json["title"],
+    description: json["description"],
+    shareUrl: json["share_url"],
+  );
 
-  Collection.fromJson(Map<String, dynamic> json) {
-    collectionId = json['collection_id'];
-    resCount = json['res_count'];
-    imageUrl = json['image_url'];
-    url = json['url'];
-    title = json['title'];
-    description = json['description'];
-    shareUrl = json['share_url'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['collection_id'] = this.collectionId;
-    data['res_count'] = this.resCount;
-    data['image_url'] = this.imageUrl;
-    data['url'] = this.url;
-    data['title'] = this.title;
-    data['description'] = this.description;
-    data['share_url'] = this.shareUrl;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "collection_id": collectionId,
+    "res_count": resCount,
+    "image_url": imageUrl,
+    "url": url,
+    "title": title,
+    "description": description,
+    "share_url": shareUrl,
+  };
 }
