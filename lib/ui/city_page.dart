@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:travelapp/core/bloc/citys_bloc.dart';
 import 'package:travelapp/core/bloc/collection_bloc.dart';
-import 'package:travelapp/core/model/city/collectionss.dart';
-import 'package:travelapp/core/model/citys_model.dart';
+import 'package:travelapp/core/model/collection/CollectionResponse.dart';
 import 'package:travelapp/core/model/toursMdl.dart';
-import 'package:travelapp/core/repositories/city_repo.dart';
-import 'package:travelapp/core/repositories/city_repositories.dart';
 import 'package:travelapp/ui/widget/appbar.dart';
 import 'package:travelapp/ui/widget/item_list_citys.dart';
 import 'package:travelapp/ui/widget/search_text.dart';
@@ -28,37 +24,37 @@ class LayoutBodyCity extends StatefulWidget {
 
 class _LayoutBodyCityState extends State<LayoutBodyCity> {
   List<ToursMdl> _tours;
-  List<CollectionElement> collections;
   var collectionLoad = false;
 
-  getDataCity(){
-    setState(() {
-      collectionLoad = false;
-    });
-    blocCity.fetchCities().then((value) {
-      setState(() {
-        collections = value;
-        print("Counter ${collections.length}");
-        if (collections.length > 0){
-          collectionLoad = true;
-        } else {
-          collectionLoad = false;
-        }
-      });
-    });
-  }
+//  getDataCity(){
+//    setState(() {
+//      collectionLoad = false;
+//    });
+//    blocCity.fetchCities().then((value) {
+//      setState(() {
+//        collections = value;
+//        print("Counter ${collections.length}");
+//        if (collections.length > 0){
+//          collectionLoad = true;
+//        } else {
+//          collectionLoad = false;
+//        }
+//      });
+//    });
+//  }
 
   @override
   void initState() {
     //getDataCity();
-    blocCity.fetchCities();
-    CollectionBloc().fetchCollection();
+    //blocCity.fetchCities();
+    blocCollection.fetchCollection();
     super.initState();
   }
 
   @override
   void dispose() {
-    blocCity.dispose();
+    //blocCity.dispose();
+    blocCollection.dispose();
     super.dispose();
   }
 
@@ -70,7 +66,7 @@ class _LayoutBodyCityState extends State<LayoutBodyCity> {
         Container(
           padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.20 + 30,),
           child: StreamBuilder<List<CollectionElement>>(
-              stream: blocCity.cities,
+              stream: blocCollection.collections,
               builder: (context, AsyncSnapshot<List<CollectionElement>> snapshot) {
                 if (snapshot.hasData){
                   return ListView.builder(

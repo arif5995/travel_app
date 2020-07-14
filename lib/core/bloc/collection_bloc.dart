@@ -27,3 +27,5 @@ class CollectionBloc {
     });  
  }
 }
+
+final blocCollection = CollectionBloc();
