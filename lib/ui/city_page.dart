@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:travelapp/core/bloc/citys_bloc.dart';
+import 'package:travelapp/core/bloc/collection_bloc.dart';
 import 'package:travelapp/core/model/city/collectionss.dart';
 import 'package:travelapp/core/model/citys_model.dart';
 import 'package:travelapp/core/model/toursMdl.dart';
@@ -51,6 +52,7 @@ class _LayoutBodyCityState extends State<LayoutBodyCity> {
   void initState() {
     //getDataCity();
     blocCity.fetchCities();
+    CollectionBloc().fetchCollection();
     super.initState();
   }
 
