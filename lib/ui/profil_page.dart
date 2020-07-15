@@ -1,8 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:travelapp/core/bloc/user_bloc.dart';
+import 'package:travelapp/core/model/user/UserResponse.dart';
 import 'package:travelapp/ui/widget/appbar.dart';
 import 'package:travelapp/ui/widget/curve_painter_half_circle.dart';
 
-class ProfilPage extends StatelessWidget {
+class ProfilPage extends StatefulWidget {
+  @override
+  _ProfilPageState createState() => _ProfilPageState();
+}
+
+class _ProfilPageState extends State<ProfilPage> {
+  @override
+  void initState() {
+    blocUser.fetchUser();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    blocUser.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,60 +51,70 @@ class ProfilPage extends StatelessWidget {
               Center(
                 child: Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 120,
-                      ),
-                      ClipOval(
-                        child: Image.asset(
-                          'assets/images/icon_profil.jpg',
-                          height: 120,
-                          width: 120,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text("Abdallah Mostafa", style: TextStyle(fontSize: 25),),
-                          SizedBox(width: 5,),
-                          Text("Edit", style: TextStyle(fontSize: 12, color: Colors.grey),),
-                        ],
-                      ),
-                      Text("Mansoura, Egypt", style: TextStyle(fontSize: 15, color: Colors.grey),),
-                      SizedBox(
-                        height: 40,
-                      ),
-                      Align(
-                        alignment: Alignment.topLeft,
-                          child: Text("Private Details", style: TextStyle(fontSize: 15, color: Colors.black),)),
-                      SizedBox(height: 15,),
-                      _inputEditProfile(title: "Email", boolPass: false),
-                      SizedBox(height: 10,),
-                      _inputEditProfile(title: "Password", boolPass: true),
-                      SizedBox(height: 10,),
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 2,
-                              child: _inputEditProfile(title: "Grander", boolPass: false)),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                              flex: 2,
-                              child: _inputEditProfile(title: "Age", boolPass: false)),
-                        ],
-                      ),
-                      SizedBox(height: 10,),
-                      _inputEditProfile(title: "Phone Number", boolPass: false),
-                    ],
+                  child: StreamBuilder<UserResponse>(
+                    stream: blocUser.user,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData){
+                        var user = snapshot.data;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            SizedBox(
+                              height: 120,
+                            ),
+                            ClipOval(
+                              child: Image.network(
+                                user.data.avatar,
+                                height: 120,
+                                width: 120,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text("${user.data.firstName} ${user.data.lastName}", style: TextStyle(fontSize: 25),),
+                                SizedBox(width: 5,),
+                                Text("Edit", style: TextStyle(fontSize: 12, color: Colors.grey),),
+                              ],
+                            ),
+                            Center(child: Text(user.ad.text, style: TextStyle(fontSize: 15, color: Colors.grey), textAlign: TextAlign.center,)),
+                            SizedBox(
+                              height: 40,
+                            ),
+                            Align(
+                                alignment: Alignment.topLeft,
+                                child: Text("Private Details", style: TextStyle(fontSize: 15, color: Colors.black),)),
+                            SizedBox(height: 15,),
+                            _inputEditProfile(title: user.data.email, boolPass: false),
+                            SizedBox(height: 10,),
+                            _inputEditProfile(title: "Password", boolPass: true),
+                            SizedBox(height: 10,),
+                            Row(
+                              children: <Widget>[
+                                Expanded(
+                                    flex: 2,
+                                    child: _inputEditProfile(title: "Grander", boolPass: false)),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                    flex: 2,
+                                    child: _inputEditProfile(title: "Age", boolPass: false)),
+                              ],
+                            ),
+                            SizedBox(height: 10,),
+                            _inputEditProfile(title: "Phone Number", boolPass: false),
+                          ],
+                        );
+                      } else if (snapshot.hasError){
+                        return Text("Data tidak ada");
+                      } return Center(child: CircularProgressIndicator(),);
+                    }
                   ),
                 ),
               ),
@@ -96,6 +125,7 @@ class ProfilPage extends StatelessWidget {
     );
   }
 }
+
 
 Container _inputEditProfile({String title, bool boolPass}){
   return Container(
