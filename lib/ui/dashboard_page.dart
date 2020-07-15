@@ -29,7 +29,7 @@ class _DashboardPageState extends State<DashboardPage> {
     ),
     BottomNavigationBarItem(
         icon: Icon(Icons.business_center),
-        title: Text("Citys")
+        title: Text("Collections")
     ),
     BottomNavigationBarItem(
         icon: Icon(Icons.search),

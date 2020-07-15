@@ -11,7 +11,7 @@ class CityPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarTop(icon: null, title: "Citys", textRight: ""),
+      appBar: AppBarTop(icon: null, title: "Collections", textRight: ""),
       body: LayoutBodyCity(),
     );
   }
