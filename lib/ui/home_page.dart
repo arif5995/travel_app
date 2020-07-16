@@ -18,7 +18,9 @@ class HomePage extends StatelessWidget {
       key: scaffoldKey,
       appBar: AppBarTop(
           icon: Icons.arrow_back_ios, title: "Flight Result", textRight: ""),
-      body: LayoutBody(scaffoldKey: scaffoldKey,),
+      body: LayoutBody(
+        scaffoldKey: scaffoldKey,
+      ),
     );
   }
 }
@@ -39,7 +41,6 @@ class ItemList {
 }
 
 class _LayoutBodyState extends State<LayoutBody> {
-
   RateMyApp _rateMyApp = RateMyApp(
     preferencesPrefix: 'rateMyApp_',
     minDays: 3,
@@ -67,7 +68,6 @@ class _LayoutBodyState extends State<LayoutBody> {
     blocCategory.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -105,34 +105,28 @@ class _LayoutBodyState extends State<LayoutBody> {
             ],
           ),
           Positioned(
-            top: MediaQuery
-                .of(context)
-                .size
-                .height * 0.10,
+            top: MediaQuery.of(context).size.height * 0.10,
             child: Container(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
+              width: MediaQuery.of(context).size.width,
               height: 150,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Card(
                   shape: RoundedRectangleBorder(
                       borderRadius:
-                      const BorderRadius.all(Radius.circular(10))),
+                          const BorderRadius.all(Radius.circular(10))),
                   child: Center(
                     child: StreamBuilder<List<Category>>(
                         stream: blocCategory.category,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            return _cardHome(lenghtCategory: snapshot, context: context);
+                            return _cardHome(
+                                lenghtCategory: snapshot, context: context);
                           } else if (snapshot.hasError) {
                             return Text("error");
                           }
                           return Container();
-                        }
-                    ),
+                        }),
                   ),
                   //OptionsCards(txtBtnDialog: "SIGN ME UP"),
                 ),
@@ -145,7 +139,8 @@ class _LayoutBodyState extends State<LayoutBody> {
   }
 }
 
-Widget _cardHome({AsyncSnapshot<List<Category>> lenghtCategory, BuildContext context}) {
+Widget _cardHome(
+    {AsyncSnapshot<List<Category>> lenghtCategory, BuildContext context}) {
   return Padding(
     padding: const EdgeInsets.all(5.0),
     child: Column(
@@ -157,21 +152,28 @@ Widget _cardHome({AsyncSnapshot<List<Category>> lenghtCategory, BuildContext con
           child: GridView.builder(
             physics: NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 16/8,
-                crossAxisSpacing: 2,
-                crossAxisCount: 3,
+              childAspectRatio: 2 / 1,
+              crossAxisSpacing: 2,
+              crossAxisCount: 3,
             ),
-            itemCount: lenghtCategory.data.length,
+            itemCount:
+                lenghtCategory.data.length > 6 ? 6 : lenghtCategory.data.length, //! untuk mengatur jumlah item, jika lebih dari 6 maka jumlahnya 6
             itemBuilder: (context, index) {
               var item = lenghtCategory.data[index];
-              if (lenghtCategory.data.length > 6){
-                if (index == 5){
-                  return IconButton(icon: Icon(Icons.more_horiz, size: 20, color: Colors.blue,), onPressed: (){});
-                }
-                return ButtonText(text: item.categories.name, icon: Icons.category, onPress: (){});
-              } else if (lenghtCategory.data.length < 6){
-                return ButtonText(text: item.categories.name, icon: Icons.category, onPress: (){});
-              } return Container();
+              if (index == 5) { //! menampilkan icon more pada akhir grid
+                return IconButton(
+                    icon: Icon(
+                      Icons.more_horiz,
+                      size: 20,
+                      color: Colors.blue,
+                    ),
+                    onPressed: () {});
+              } else { //! menampilkan nama kategori
+                return ButtonText(
+                    text: item.categories.name,
+                    icon: Icons.category,
+                    onPress: () {});
+              }
             },
           ),
         ),
@@ -184,9 +186,9 @@ Widget _bottomSheet(BuildContext context) {
   showModalBottomSheet(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(24.0),
-            topRight: Radius.circular(24.0),
-          )),
+        topLeft: Radius.circular(24.0),
+        topRight: Radius.circular(24.0),
+      )),
       backgroundColor: Colors.white,
       context: context,
       builder: (context) {
