@@ -5,6 +5,7 @@ import 'package:travelapp/core/bloc/category_bloc.dart';
 import 'package:travelapp/core/model/category/catagoryResponse.dart';
 import 'package:travelapp/core/string/string.dart';
 import 'package:travelapp/ui/widget/appbar.dart';
+import 'package:travelapp/ui/widget/button_color.dart';
 import 'package:travelapp/ui/widget/button_text.dart';
 import 'package:travelapp/ui/widget/item_card.dart';
 
@@ -153,34 +154,79 @@ Widget _cardHome({AsyncSnapshot<List<Category>> lenghtCategory, BuildContext con
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Expanded(
-          flex: 1,
           child: GridView.builder(
             physics: NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               childAspectRatio: 16/8,
-                crossAxisCount: 3),
+                crossAxisSpacing: 2,
+                crossAxisCount: 3,
+            ),
             itemCount: lenghtCategory.data.length,
             itemBuilder: (context, index) {
               var item = lenghtCategory.data[index];
-              return ButtonText(text: item.categories.name, icon: Icons.star, onPress: (){});
-            },
-          ),
-        ),
-        Expanded(
-          flex: 1,
-          child: GridView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 18/9,
-                crossAxisCount: 3),
-            itemCount: lenghtCategory.data.length,
-            itemBuilder: (context, index) {
-              var item = lenghtCategory.data[index];
-              return ButtonText(text: item.categories.name, icon: Icons.category, onPress: (){});
+              if (lenghtCategory.data.length > 6){
+                if (index == 5){
+                  return IconButton(icon: Icon(Icons.more_horiz, size: 20, color: Colors.blue,), onPressed: (){});
+                }
+                return ButtonText(text: item.categories.name, icon: Icons.category, onPress: (){});
+              } else if (lenghtCategory.data.length < 6){
+                return ButtonText(text: item.categories.name, icon: Icons.category, onPress: (){});
+              } return Container();
             },
           ),
         ),
       ],
     ),
   );
+}
+
+Widget _bottomSheet(BuildContext context) {
+  showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(24.0),
+            topRight: Radius.circular(24.0),
+          )),
+      backgroundColor: Colors.white,
+      context: context,
+      builder: (context) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.5,
+          color: Colors.transparent,
+//          decoration: BoxDecoration(
+//            color: Colors.white,
+//            borderRadius: BorderRadius.only(
+//              topLeft: Radius.circular(24.0),
+//              topRight: Radius.circular(24.0),
+//            ),
+//          ),
+          child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Text(
+                  "Daftar Nama",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text("Muhammad Arif"),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text("Jihan Ardilla"),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text("Ayu"),
+              onTap: () {},
+            ),
+          ]),
+        );
+      });
 }
