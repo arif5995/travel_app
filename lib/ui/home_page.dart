@@ -139,8 +139,7 @@ class _LayoutBodyState extends State<LayoutBody> {
   }
 }
 
-Widget _cardHome(
-    {AsyncSnapshot<List<Category>> lenghtCategory, BuildContext context}) {
+Widget _cardHome({AsyncSnapshot<List<Category>> lenghtCategory, BuildContext context}) {
   return Padding(
     padding: const EdgeInsets.all(5.0),
     child: Column(
@@ -156,8 +155,7 @@ Widget _cardHome(
               crossAxisSpacing: 2,
               crossAxisCount: 3,
             ),
-            itemCount:
-                lenghtCategory.data.length > 6 ? 6 : lenghtCategory.data.length, //! untuk mengatur jumlah item, jika lebih dari 6 maka jumlahnya 6
+            itemCount: lenghtCategory.data.length > 6 ? 6 : lenghtCategory.data.length, //! untuk mengatur jumlah item, jika lebih dari 6 maka jumlahnya 6
             itemBuilder: (context, index) {
               var item = lenghtCategory.data[index];
               if (index == 5) { //! menampilkan icon more pada akhir grid
@@ -167,7 +165,7 @@ Widget _cardHome(
                       size: 20,
                       color: Colors.blue,
                     ),
-                    onPressed: () {});
+                    onPressed: () => _bottomSheet(context: context, lenghtCategory: lenghtCategory));
               } else { //! menampilkan nama kategori
                 return ButtonText(
                     text: item.categories.name,
@@ -182,7 +180,7 @@ Widget _cardHome(
   );
 }
 
-Widget _bottomSheet(BuildContext context) {
+Widget _bottomSheet({BuildContext context, AsyncSnapshot<List<Category>> lenghtCategory}) {
   showModalBottomSheet(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -213,21 +211,24 @@ Widget _bottomSheet(BuildContext context) {
                 ),
               ),
             ),
-            ListTile(
-              leading: Icon(Icons.person),
-              title: Text("Muhammad Arif"),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.person),
-              title: Text("Jihan Ardilla"),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.person),
-              title: Text("Ayu"),
-              onTap: () {},
-            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: GridView.builder(
+                shrinkWrap: true,
+                  gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(
+                childAspectRatio: 2 / 1,
+                crossAxisSpacing: 2,
+                crossAxisCount: 3,
+              ),
+                  itemCount: lenghtCategory.data.length,
+                  itemBuilder: (context, index){
+                    var item = lenghtCategory.data[index];
+                    return ButtonText(
+                        text: item.categories.name,
+                        icon: Icons.category,
+                        onPress: () {});
+                  }),
+            )
           ]),
         );
       });
