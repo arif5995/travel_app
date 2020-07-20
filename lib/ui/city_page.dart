@@ -1,4 +1,6 @@
+import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:travelapp/core/bloc/collections_bloc.dart';
 import 'package:travelapp/core/model/toursMdl.dart';
@@ -27,11 +29,39 @@ class _LayoutBodyCityState extends State<LayoutBodyCity> {
   CollectionBlocs collectionBlocs = CollectionBlocs();
   var collectionLoad = false;
 
+  Future _checkGps() async {
+    if (!(await Geolocator().isLocationServiceEnabled())) {
+      if (Theme.of(context).platform == TargetPlatform.android) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Can't get gurrent location"),
+              content:
+              const Text('Please make sure you enable GPS and try again'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Ok'),
+                  onPressed: () {
+                    final AndroidIntent intent = AndroidIntent(
+                        action: 'android.settings.LOCATION_SOURCE_SETTINGS');
+
+                    intent.launch();
+                    Navigator.of(context, rootNavigator: true).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }
+  }
 
   @override
   void initState() {
-    //blocCollection.fetchCollection();
     collectionBlocs.add(CollectionEvent(text: null));
+    _checkGps();
     super.initState();
   }
 

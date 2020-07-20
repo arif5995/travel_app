@@ -34,9 +34,9 @@ class CollectionBlocs {
     final _position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     List<CollectionElement> data = [];
     List<CollectionElement> data1 = [];
-    data.clear();
     if (event.text == null){
       try{
+        data.clear();
         data = await repository.getCollections(lat: _position.latitude, lon: _position.longitude );
         print("lat : ${_position.latitude}");
         print("lat : ${_position.longitude}");
@@ -47,11 +47,11 @@ class CollectionBlocs {
       }
     } else {
       try{
+        data1.clear();
         data = await repository.getCollections(lat: _position.latitude, lon: _position.longitude);
         data.forEach((element) {
-          if (element.collection.title.contains(event.text)) {
+          if (element.collection.title.toUpperCase().contains(event.text.toUpperCase()))
             data1.add(element);
-          }
         });
         _stateControllerCollection.sink.add(CollectionList(collection: data1));
 
