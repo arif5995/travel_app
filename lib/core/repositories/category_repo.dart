@@ -1,6 +1,7 @@
 
 
 import 'package:dio/dio.dart';
+import 'package:travelapp/core/config/end_pont.dart';
 import 'package:travelapp/core/model/category/catagoryResponse.dart';
 
 class CategoryRepo {
@@ -9,10 +10,10 @@ class CategoryRepo {
   Future<List<Category>> getCategory() async {
     try {
       final response = await dio.get(
-          "https://developers.zomato.com/api/v2.1/categories",
+          EndPoint.category,
           options: Options(
               headers: {
-                "user-key": "cfd175d769fd9f8f63071f7b75d77a8d"
+                "user-key": EndPoint.userKey
               }
           )
       );
