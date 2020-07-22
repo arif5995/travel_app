@@ -12,9 +12,10 @@ class CollectionRepo {
 //  double lon = 111.7962077;
 
   Future<List<CollectionElement>> getCollections({double  lat, double lon }) async {
+    //"${EndPoint.collections}city_id=1&lat=$lat&lon=$lon&count=40",
     try {
       final response = await dio.get(
-          "${EndPoint.collections}city_id=1&lat=$lat&lon=$lon&count=40",
+          "${EndPoint.collections}&lat=$lat&lon=$lon&count=40",
           options: Options(
               headers: {
                 "user-key": EndPoint.userKey

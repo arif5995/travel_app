@@ -39,15 +39,16 @@ class ItemCard extends StatelessWidget {
                       topLeft: Radius.circular(8.0),
                       bottomLeft: Radius.circular(8.0),
                     ),
-                    child: CachedNetworkImage(
-                        imageUrl: txtPicture,
-                        fit: BoxFit.fill,
-                    )
+                    child:
+//                    CachedNetworkImage(
+//                        imageUrl: txtPicture,
+//                        fit: BoxFit.fill,
+//                    )
 
-//                    Image.network(
-//                      txtPicture,
-//                      fit: BoxFit.fill,
-//                    ),
+                    Image.network(
+                      txtPicture,
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
               ),
@@ -75,7 +76,7 @@ class ItemCard extends StatelessWidget {
                         children: <Widget>[
                           Align(
                             alignment: Alignment.topLeft,
-                            child: Text(txtPlaceName, style: TextStyle(
+                            child: Text(txtPlaceName, overflow: TextOverflow.fade, style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.bold
                             ),)
