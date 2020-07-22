@@ -38,7 +38,7 @@ class _LayoutBodyCityState extends State<LayoutBodyCity> {
             return AlertDialog(
               title: Text("Can't get gurrent location"),
               content:
-              const Text('Please make sure you enable GPS and try again'),
+                  const Text('Please make sure you enable GPS and try again'),
               actions: <Widget>[
                 FlatButton(
                   child: Text('Ok'),
@@ -72,8 +72,8 @@ class _LayoutBodyCityState extends State<LayoutBodyCity> {
     super.dispose();
   }
 
-  void onSearch(String text){
-    if (text.isEmpty){
+  void onSearch(String text) {
+    if (text.isEmpty) {
       setState(() {});
       return;
     }
@@ -91,29 +91,36 @@ class _LayoutBodyCityState extends State<LayoutBodyCity> {
           padding: EdgeInsets.only(
             top: MediaQuery.of(context).size.height * 0.20 + 30,
           ),
-          child:  StreamBuilder<CollectionState>(
-                  stream: collectionBlocs.stateStream,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      if (snapshot.data is CollectionList){
-                          final data = snapshot.data as CollectionList;
-                          return ListView.builder(
-                              itemCount: data.collection.length,
-                              shrinkWrap: true,
-                              physics: ClampingScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                var item = data.collection[index];
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 20),
-                                  child: ItemListCitys(
-                                      itemImg: item.collection.imageUrl,
-                                      itemTitle: item.collection.title),
-                                );
-                              });
-                      }
-                    }return Center(child: CircularProgressIndicator(),);
-                  }),
+          child: StreamBuilder<CollectionState>(
+              stream: collectionBlocs.stateStream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data is CollectionError) { //! cek collection error
+                    final data = snapshot.data as CollectionError;
+                    return _buildError(message: data.errorMessage);
+                  } else if (snapshot.data is CollectionList) { //! cek data list data collection
+                    final data = snapshot.data as CollectionList;
+                    return ListView.builder(
+                        itemCount: data.collection.length,
+                        shrinkWrap: true,
+                        physics: ClampingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          var item = data.collection[index];
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
+                            child: ItemListCitys(
+                                itemImg: item.collection.imageUrl,
+                                itemTitle: item.collection.title),
+                          );
+                        });
+                  }
+                } else if (snapshot.hasError) { //! cek snapshot error
+                  return _buildError(message: "Error");
+                } else {
+                  return _buildProgress(); 
+                }
+              }),
         ),
         Container(
           height: MediaQuery.of(context).size.height * 0.20,
@@ -128,14 +135,25 @@ class _LayoutBodyCityState extends State<LayoutBodyCity> {
           child: SearchText(
               controller: controllerSearch,
               onChange: onSearch,
-              onPress: (){
+              onPress: () {
                 controllerSearch.clear();
                 collectionBlocs.add(CollectionEvent(text: null));
-              }
-          ),
+              }),
           //api = cfd175d769fd9f8f63071f7b75d77a8d
         ),
       ],
     ));
+  }
+
+  Center _buildError({String message}) {
+    return Center(
+      child: Text(message),
+    );
+  }
+
+  Center _buildProgress() {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
   }
 }
