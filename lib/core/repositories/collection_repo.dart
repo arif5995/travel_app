@@ -1,26 +1,29 @@
-
+import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import 'package:travelapp/core/config/end_pont.dart';
 import 'package:travelapp/core/model/collection/CollectionResponse.dart';
 import 'dart:convert';
 
 class CollectionRepo {
   Dio dio = Dio();
+//  double  lat = -7.9941872;
+//  double lon = 111.7962077;
 
-  // ignore: missing_return
-  Future<List<CollectionElement>> getCollections() async {
+  Future<List<CollectionElement>> getCollections(
+      {double lat, double lon}) async {
+    //"${EndPoint.collections}city_id=1&lat=$lat&lon=$lon&count=40",
     try {
       final response = await dio.get(
-          "https://developers.zomato.com/api/v2.1/collections?lat=-6.229728&lon=106.6894312",
-          options: Options(
-              headers: {
-                "user-key": "cfd175d769fd9f8f63071f7b75d77a8d"
-              }
-          )
+        "${EndPoint.collections}&lat=$lat&lon=$lon&count=40",
+        options: Options(headers: {"user-key": EndPoint.userKey}),
       );
       print("masuk");
       print(response.statusCode);
-      if (200 == response.statusCode){
+      print("lat : $lat");
+      print("lat : $lon");
+      if (200 == response.statusCode && response.data != null) { //! cek success error dan cek daa response
         CollectionResponse model = CollectionResponse.fromJson(response.data);
         List<CollectionElement> collections = model.collections;
         print(collections.length);
@@ -28,10 +31,10 @@ class CollectionRepo {
       } else {
         print("Gagal");
       }
-    }catch (e) {
+    } catch (e) {
       print("Gagal $e");
+      print("lat : $lat");
+      print("lat : $lon");
     }
-
   }
-
 }

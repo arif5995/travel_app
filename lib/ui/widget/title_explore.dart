@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 Container TitleList({String title,bool boolLeft, bool boolRight, Function onPressLeft, Function onPressRight}){
   return Container(
-    padding: EdgeInsets.symmetric(horizontal: 15),
+    padding: EdgeInsets.symmetric(horizontal: 15.0),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
