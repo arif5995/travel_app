@@ -17,18 +17,57 @@ class _ExplorePageState extends State<ExplorePage> {
   final _controller1  = ScrollController();
   final _controller2  = ScrollController();
   final _controller3  = ScrollController();
-  bool pressRight = true;
-  bool pressLeft  = true;
+  bool pressRight1 = true;
+  bool pressLeft1= true;
+  bool pressRight2 = true;
+  bool pressLeft2 = true;
+  bool pressRight3 = true;
+  bool pressLeft3 = true;
   Color _iconColor = Colors.grey;
   CuisinesBloc cuisinesBloc = CuisinesBloc();
   CollectionBlocs collectionBlocs = CollectionBlocs();
 
   //List<ToursMdl> _tours;
 
-  void onPressedRight(){
+  void onPressedRight1(){
     setState(() {
-      pressRight = true;
-      pressLeft = false;
+      pressRight1 = true;
+      pressLeft1 = false;
+    });
+  }
+
+  void onPressedLeft1(){
+    setState(() {
+      pressRight1 = false;
+      pressLeft1 = true;
+    });
+  }
+
+  void onPressedRight2(){
+    setState(() {
+      pressRight2 = true;
+      pressLeft2 = false;
+    });
+  }
+
+  void onPressedLeft2(){
+    setState(() {
+      pressRight2 = false;
+      pressLeft2 = true;
+    });
+  }
+
+  void onPressedRight3(){
+    setState(() {
+      pressRight3 = true;
+      pressLeft3 = false;
+    });
+  }
+
+  void onPressedLeft3(){
+    setState(() {
+      pressRight3 = false;
+      pressLeft3 = true;
     });
   }
 
@@ -38,13 +77,6 @@ class _ExplorePageState extends State<ExplorePage> {
     collectionBlocs.dispose();
     blocCategory.dispose();
     super.dispose();
-  }
-
-  void onPressedLeft(){
-    setState(() {
-      pressRight = false;
-      pressLeft = true;
-    });
   }
 
   @override
@@ -69,43 +101,43 @@ class _ExplorePageState extends State<ExplorePage> {
               child: ListView(
                children: <Widget>[
                  TitleList(
-                   title: "Populer Tours",
-                   boolLeft: pressLeft,
-                   boolRight: pressRight,
+                   title: "Cussines",
+                   boolLeft: pressLeft1,
+                   boolRight: pressRight1,
                    onPressLeft: (){
-                     onPressedRight();
+                     onPressedRight1();
                      _populersTours(-3);
                    },
                    onPressRight: (){
-                     onPressedLeft();
+                     onPressedLeft1();
                      _populersTours(3);
                    }
                  ),
                  _listViewPopulersTours(),
                  TitleList(
-                     title: "New Offers Tours",
-                     boolLeft: pressLeft,
-                     boolRight: pressRight,
+                     title: "Cotegory",
+                     boolLeft: pressLeft2,
+                     boolRight: pressRight2,
                      onPressLeft: (){
-                       onPressedRight();
+                       onPressedRight2();
                        _offersTours(-3);
                      },
                      onPressRight: (){
-                       onPressedLeft();
+                       onPressedLeft2();
                        _offersTours(3);
                      }
                  ),
                  _listViewOffersTours(),
                  TitleList(
-                     title: "Best Destinations",
-                     boolLeft: pressLeft,
-                     boolRight: pressRight,
+                     title: "Collections",
+                     boolLeft: pressLeft3,
+                     boolRight: pressRight3,
                      onPressLeft: (){
-                       onPressedRight();
+                       onPressedRight3();
                        _bestDestination(-3);
                      },
                      onPressRight: (){
-                       onPressedLeft();
+                       onPressedLeft3();
                        _bestDestination(3);
                      }
                  ),
@@ -195,7 +227,7 @@ class _ExplorePageState extends State<ExplorePage> {
 
           }else if(snapshot.hasError){
             return Text(snapshot.hasError.toString());
-          } return Container();
+          } return Center(child: CircularProgressIndicator(),);
         }
       ),
     );
