@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:rate_my_app/rate_my_app.dart';
@@ -69,26 +71,32 @@ class _LayoutBodyState extends State<LayoutBody> {
                   color: Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 90),
-                    child: StreamBuilder<List<RestaurantElement>>(
+                    child: StreamBuilder<RestorantState>(
                       stream: restorantBloc.restorant,
-                      builder: (context, AsyncSnapshot<List<RestaurantElement>> snapshot) {
-                        return ListView.builder(
-                          itemCount: snapshot.data.length,
-                          itemBuilder: (context, index) {
-                            var item = snapshot.data[index];
-                            if (snapshot.data != null){
-                              if (snapshot.hasData){
-                                return ItemCard(
-                                  txtPicture: item.restaurant.url,
-                                  txtPlaceName: item.restaurant.name,
-                                  txtPrice: "",);
-
-                              }else if (snapshot.hasError){
-                                return Text(snapshot.hasError.toString());
-                              }return Container();
-                            }return Center(child: CircularProgressIndicator(),);
-                          }
-                        );
+                      builder: (context, snapshot) {
+                       if (snapshot.hasData){
+                         if (snapshot.data is RestorantSuccess){
+                           final data =  snapshot.data as RestorantSuccess;
+                           return ListView.builder(
+                               itemCount: data.restorant.length,
+                               itemBuilder: (context, index) {
+                                 var item = data.restorant[index];
+                                 return ItemCard(
+                                   txtPicture: item.restaurant.thumb,
+                                   txtPlaceName: item.restaurant.name,
+                                   txtAlamat: item.restaurant.location.address,
+                                    rating: double.parse(item.restaurant.userRating.aggregateRating));
+                               }
+                           );
+                         }else if (snapshot.data is RestorantError){
+                           final error = snapshot.data as RestorantError;
+                           return _buildError(message: error.error);
+                         } return Container();
+                       }else if (snapshot.hasError) { //! cek snapshot error
+                         return _buildError(message: "Error");
+                       } else {
+                         return _buildProgress();
+                       }
                       }
                     ),
                   ),
@@ -128,6 +136,18 @@ class _LayoutBodyState extends State<LayoutBody> {
       ),
     );
   }
+
+ Center _buildError({String message}) {
+   return Center(
+     child: Text(message),
+   );
+ }
+
+ Center _buildProgress() {
+   return Center(
+     child: CircularProgressIndicator(),
+   );
+ }
 }
 
 Widget _cardHome({AsyncSnapshot<List<Category>> lenghtCategory, BuildContext context}) {

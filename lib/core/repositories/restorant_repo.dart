@@ -23,7 +23,7 @@ class RestorantRepo {
       print("resto : ${response.statusCode}");
       print("lat1 : $lat");
       print("lat1 : $lon");
-      if (200 == response.statusCode){
+      if (200 == response.statusCode && response.data != null){
         RestorantResponse model = RestorantResponse.fromJson(response.data);
         List<RestaurantElement> collections = model.restaurants;
         print(collections.length);

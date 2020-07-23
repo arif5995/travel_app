@@ -1,118 +1,89 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:travelapp/core/string/string.dart';
-import 'package:travelapp/ui/widget/star_rating.dart';
+import 'package:travelapp/ui/widget/custom_rating.dart';
 
 class ItemCard extends StatelessWidget {
-  final String txtPicture, txtPlaceName, txtPrice;
+  final String txtPicture, txtPlaceName, txtAlamat;
   final Function onChanged;
+  final double rating;
 
-  ItemCard({this.txtPicture, this.txtPlaceName, this.txtPrice, this.onChanged});
-
+  ItemCard({this.txtPicture, this.txtPlaceName, this.txtAlamat, this.onChanged, this.rating});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Container(
-        height: 120,
         child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8.0)),
-          ),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.4,
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8.0),
-                      bottomLeft: Radius.circular(8.0),
-                    ),
-                    child:
-//                    CachedNetworkImage(
-//                        imageUrl: txtPicture,
-//                        fit: BoxFit.fill,
-//                    )
-
-                    Image.network(
-                      txtPicture,
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              Expanded(
-                flex: 2,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            ),
+            child: Column(
+              children: <Widget>[
+                Row(
                   children: <Widget>[
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: StarRating(
-                        onChanged: onChanged,
-                        value: 0,
-                        unfilledStar: Icons.star_border,
-                        filledStar: Icons.star,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(txtPlaceName, overflow: TextOverflow.fade, style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold
-                            ),)
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 5),
-                            child: Align(
-                              alignment: Alignment.topRight,
-                              child: Icon(
-                                Icons.favorite, color: Colors.pink,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 5, top: 10, bottom: 5),
-                        child: Text(
-                          txtPrice,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,
-                            fontSize: 15
-                          ),
-                        ),
-                      ),
-                    )
+                    _imageRestorant(context),
+                    SizedBox(width: 5,),
+                    _content(),
                   ],
                 ),
-              )
-            ],
-          ),
+                //Divider(color: Colors.black12),
+              ],
+            )
         ),
+      ),
+    );
+  }
+
+  _imageRestorant(context) {
+    return Container(
+      width: 100,
+      height: 100,
+      decoration: BoxDecoration(
+          color: Colors.grey,
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(8.0),
+            topLeft: Radius.circular(8.0),
+          ),
+          image: DecorationImage(
+              image: NetworkImage(txtPicture),
+              fit: BoxFit.cover
+          )
+      ),
+    );
+  }
+
+  _content(){
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            txtPlaceName,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+              fontSize: 12.0,
+              color: Colors.black87,
+              fontWeight: FontWeight.w700)
+          ),
+          SizedBox(height: 5,),
+          CustomRating(
+            rating: rating,
+            useReview: false,
+          ),
+          SizedBox(height: 5,),
+          Padding(
+            padding: const EdgeInsets.only(right: 5),
+            child: Text(
+              txtAlamat,
+              style: TextStyle(
+                fontSize: 10,
+                color: Colors.black45
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

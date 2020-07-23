@@ -4,13 +4,26 @@ import 'package:travelapp/core/model/restorant/RestorantResponse.dart';
 import 'package:travelapp/core/repositories/restorant_repo.dart';
 import 'dart:async';
 
+abstract class RestorantState {}
+class RestorantError extends RestorantState {
+  final String error;
+
+  RestorantError(this.error);
+}
+
+class RestorantSuccess extends RestorantState {
+  final List<RestaurantElement> restorant;
+
+  RestorantSuccess(this.restorant);
+}
+
 class RestorantBloc {
   final RestorantRepo _restorantRepo = RestorantRepo();
-  final _restorant = BehaviorSubject<List<RestaurantElement>>();
+  final BehaviorSubject <RestorantState> _restorant = BehaviorSubject<RestorantState>();
 
-  Stream<List<RestaurantElement>> get restorant => _restorant.stream;
+  Stream<RestorantState> get restorant => _restorant.stream;
 
-  Function(List<RestaurantElement>) get changeRestorant => _restorant.sink.add;
+  Function(RestorantState) get changeRestorant => _restorant.sink.add;
 
   bool _isDisposed = false;
 
@@ -28,7 +41,12 @@ class RestorantBloc {
     }else {
       _restorantRepo.getRestorant(
           lat: _position.latitude, lon: _position.longitude).then((value) {
-        _restorant.sink.add(value);
+        if (value != null){
+          changeRestorant(RestorantSuccess(value));
+        } else {
+          changeRestorant(RestorantError("Data Kosong"));
+        }
+
       });
     }
   }
