@@ -2,15 +2,29 @@ import 'package:rxdart/rxdart.dart';
 import 'package:travelapp/core/model/category/catagoryResponse.dart';
 import 'package:travelapp/core/repositories/category_repo.dart';
 
+abstract class StateCategory {}
+
+class StateCategoryError extends StateCategory {
+  final String error;
+
+  StateCategoryError(this.error);
+}
+
+class StateCategorySuccess extends StateCategory {
+  final List<Category> list;
+
+  StateCategorySuccess(this.list);
+}
+
 class CategoryBloc {
   final CategoryRepo repoCategory = CategoryRepo();
-  final _category = BehaviorSubject<List<Category>>();
+  final _category = BehaviorSubject<StateCategory>();
 
   //Get Data
-  Stream<List<Category>> get category => _category.stream;
+  Stream<StateCategory> get category => _category.stream;
 
   //Set Data
-  Function (List<Category>) get  changeCategory => _category.sink.add;
+  Function (StateCategory) get  changeCategory => _category.sink.add;
 
   bool _isDisposed = false;
   dispose(){
@@ -24,7 +38,11 @@ class CategoryBloc {
    } else {
      repoCategory.getCategory().then((value) {
        print("Result : ${value.length}");
-       _category.sink.add(value);
+       if (value != null){
+         changeCategory(StateCategorySuccess(value));
+       } else {
+         changeCategory(StateCategoryError("Daata Kosong"));
+       }
      });
    }
   }

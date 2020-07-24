@@ -20,7 +20,7 @@ class CategoryRepo {
       print("masuk");
       print(response.statusCode);
       print("category : ${response.data}");
-      if (200 == response.statusCode){
+      if (200 == response.statusCode && response.data != null){
         CatagoryResponse catagoryResponse = CatagoryResponse.fromJson(response.data);
         List<Category> category = catagoryResponse.categories;
         print("category : ${category.length}");
