@@ -116,11 +116,16 @@ class _LayoutBodyState extends State<LayoutBody> {
                       borderRadius:
                           const BorderRadius.all(Radius.circular(10))),
                   child: Center(
-                    child: StreamBuilder<List<Category>>(
+                    child: StreamBuilder<StateCategory>(
                         stream: blocCategory.category,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            return _cardHome(lenghtCategory: snapshot, context: context);
+                            if (snapshot.data is StateCategoryError){
+                              final error = snapshot.data as StateCategoryError;
+                              return Center(child: Text(error.error),);
+                            } else if (snapshot.data is StateCategorySuccess);
+                            final data = snapshot.data as StateCategorySuccess;
+                            return _cardHome(lenghtCategory: data.list, context: context);
                           } else if (snapshot.hasError) {
                             return Text("error");
                           }
@@ -144,13 +149,12 @@ class _LayoutBodyState extends State<LayoutBody> {
  }
 
  Center _buildProgress() {
-   return Center(
-     child: CircularProgressIndicator(),
+   return Center(child: CircularProgressIndicator(),
    );
  }
 }
 
-Widget _cardHome({AsyncSnapshot<List<Category>> lenghtCategory, BuildContext context}) {
+Widget _cardHome({List<Category> lenghtCategory, BuildContext context}) {
   return Padding(
     padding: const EdgeInsets.all(5.0),
     child: Column(
@@ -166,9 +170,9 @@ Widget _cardHome({AsyncSnapshot<List<Category>> lenghtCategory, BuildContext con
               crossAxisSpacing: 2,
               crossAxisCount: 3,
             ),
-            itemCount: lenghtCategory.data.length > 6 ? 6 : lenghtCategory.data.length, //! untuk mengatur jumlah item, jika lebih dari 6 maka jumlahnya 6
+            itemCount: lenghtCategory.length > 6 ? 6 : lenghtCategory.length, //! untuk mengatur jumlah item, jika lebih dari 6 maka jumlahnya 6
             itemBuilder: (context, index) {
-              var item = lenghtCategory.data[index];
+              var item = lenghtCategory[index];
               if (index == 5) { //! menampilkan icon more pada akhir grid
                 return IconButton(
                     icon: Icon(
@@ -191,7 +195,7 @@ Widget _cardHome({AsyncSnapshot<List<Category>> lenghtCategory, BuildContext con
   );
 }
 
-Widget _bottomSheet({BuildContext context, AsyncSnapshot<List<Category>> lenghtCategory}) {
+Widget _bottomSheet({BuildContext context, List<Category> lenghtCategory}) {
   showModalBottomSheet(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -231,9 +235,9 @@ Widget _bottomSheet({BuildContext context, AsyncSnapshot<List<Category>> lenghtC
                 crossAxisSpacing: 2,
                 crossAxisCount: 3,
               ),
-                  itemCount: lenghtCategory.data.length,
+                  itemCount: lenghtCategory.length,
                   itemBuilder: (context, index){
-                    var item = lenghtCategory.data[index];
+                    var item = lenghtCategory[index];
                     return ButtonText(
                         text: item.categories.name,
                         icon: Icons.category,
