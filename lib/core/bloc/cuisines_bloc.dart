@@ -36,8 +36,8 @@ class CuisinesBloc {
     if (_isDisposed){
 
     } else {
-      final _position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      repoCuisines.getCuisines(lat: _position.latitude, lon: _position.longitude).then((value){
+      //final _position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      repoCuisines.getCuisines(lat: -6.229728, lon: 106.6894312).then((value){
         if (value != null){
           changeCategory(StateCuisinesSucces(value));
         } else {

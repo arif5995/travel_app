@@ -1,13 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:rate_my_app/rate_my_app.dart';
 import 'package:travelapp/core/bloc/category_bloc.dart';
 import 'package:travelapp/core/bloc/restorant_bloc.dart';
 import 'package:travelapp/core/model/category/catagoryResponse.dart';
-import 'package:travelapp/core/model/restorant/RestorantResponse.dart';
-import 'package:travelapp/core/string/string.dart';
 import 'package:travelapp/ui/widget/appbar.dart';
 import 'package:travelapp/ui/widget/button_text.dart';
 import 'package:travelapp/ui/widget/item_card.dart';
