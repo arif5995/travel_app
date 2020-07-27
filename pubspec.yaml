@@ -38,6 +38,7 @@ dependencies:
   geolocator: ^5.3.2+2
   #android_intent: ^0.3.7
   flutter_rating_bar: ^3.0.1+1
+  responsive_builder:
 
 dev_dependencies:
   flutter_test:

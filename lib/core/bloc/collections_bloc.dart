@@ -28,32 +28,26 @@ class CollectionBlocs {
   final CollectionRepo repository = CollectionRepo();
 
   //stream to map
-  final BehaviorSubject<CollectionEvent> _eventControllerCollection =
-      BehaviorSubject<CollectionEvent>();
-  StreamSink<CollectionEvent> get eventSinkCollection =>
-      _eventControllerCollection.sink;
+  final BehaviorSubject<CollectionEvent> _eventControllerCollection = BehaviorSubject<CollectionEvent>();
+  StreamSink<CollectionEvent> get eventSinkCollection => _eventControllerCollection.sink;
 
   //stream to state
-  final BehaviorSubject<CollectionState> _stateControllerCollection =
-      BehaviorSubject<CollectionState>();
-  StreamSink<CollectionState> get _stateSinkCollection =>
-      _stateControllerCollection.sink;
+  final BehaviorSubject<CollectionState> _stateControllerCollection = BehaviorSubject<CollectionState>();
+  StreamSink<CollectionState> get _stateSinkCollection => _stateControllerCollection.sink;
   Stream<CollectionState> get stateStream => _stateControllerCollection.stream;
 
   Function(CollectionState) get changeCollectionState => _stateControllerCollection.sink.add; //! add function to change state
 
   void _mapEventToState(CollectionEvent event) async {
-    final _position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+//    final _position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+//    lat: _position.latitude, lon: _position.longitude
     List<CollectionElement> data = [];
     List<CollectionElement> data1 = [];
     if (event.text == null) {
       try {
         data.clear();
-        data = await repository.getCollections(
-            lat: _position.latitude, lon: _position.longitude);
-        print("lat : ${_position.latitude}");
-        print("lat : ${_position.longitude}");
+        data = await repository.getCollections(lat: -6.229728, lon: 106.6894312);
+
         print("data : $data");
         if (data != null) { //! cek data kosong atau tidak
           changeCollectionState(CollectionList(collection: data)); //! update state to list collection
@@ -67,8 +61,7 @@ class CollectionBlocs {
     } else {
       try {
         data1.clear();
-        data = await repository.getCollections(
-            lat: _position.latitude, lon: _position.longitude);
+        data = await repository.getCollections(lat: -6.229728, lon: 106.6894312);
         data.forEach((element) {
           if (element.collection.title
               .toUpperCase()

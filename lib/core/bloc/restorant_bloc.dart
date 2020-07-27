@@ -33,21 +33,17 @@ class RestorantBloc {
   }
 
   Future <List<RestaurantElement>> fetchRestorant() async{
-    final _position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    print("lat1 : ${_position.latitude}");
-    print("lon1 :  ${_position.longitude}");
+    //final _position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
     if (_isDisposed){
 
     }else {
-      _restorantRepo.getRestorant(
-          lat: _position.latitude, lon: _position.longitude).then((value) {
-        if (value != null){
-          changeRestorant(RestorantSuccess(value));
-        } else {
-          changeRestorant(RestorantError("Data Kosong"));
-        }
-
-      });
+      List<RestaurantElement> list = await _restorantRepo.getRestorant(lat: -6.229728, lon: 106.6894312);
+      if (list != null){
+        changeRestorant(RestorantSuccess(list));
+      } else {
+        changeRestorant(RestorantError("Data Kosong"));
+      }
     }
   }
 
