@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 import 'package:travelapp/core/bloc/category_bloc.dart';
 import 'package:travelapp/core/bloc/restorant_bloc.dart';
 import 'package:travelapp/core/model/category/catagoryResponse.dart';
@@ -120,7 +121,20 @@ class _LayoutBodyState extends State<LayoutBody> {
                               return Center(child: Text(error.error),);
                             } else if (snapshot.data is StateCategorySuccess);
                             final data = snapshot.data as StateCategorySuccess;
-                            return _cardHome(lenghtCategory: data.list, context: context);
+                            return ResponsiveBuilder(
+                              builder: (context, sizingInformation){
+                                switch (sizingInformation.deviceScreenType){
+                                  case DeviceScreenType.mobile:
+                                    return  _cardHome(lenghtCategory: data.list, context: context);
+                                    break;
+                                  case DeviceScreenType.desktop:
+                                    return  _cardHome1(lenghtCategory: data.list, context: context);
+                                    break;
+                                  default:
+                                    return Container();
+                                }
+                              },
+                            );
                           } else if (snapshot.hasError) {
                             return Text("error");
                           }
@@ -172,12 +186,55 @@ Widget _cardHome({List<Category> lenghtCategory, BuildContext context}) {
                 return IconButton(
                     icon: Icon(
                       Icons.more_horiz,
-                      size: 20,
+                      size: getValueForScreenType<double>(context: context, mobile: 20.0, tablet: 30.0, desktop: 50.0),
                       color: Colors.blue,
                     ),
                     onPressed: () => _bottomSheet(context: context, lenghtCategory: lenghtCategory));
               } else { //! menampilkan nama kategori
                 return ButtonText(
+                    context: context,
+                    text: item.categories.name,
+                    icon: Icons.category,
+                    onPress: () {});
+              }
+            },
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _cardHome1({List<Category> lenghtCategory, BuildContext context}) {
+  return Padding(
+    padding: const EdgeInsets.all(5.0),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Expanded(
+          child: GridView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: 16 / 8,
+              crossAxisSpacing: 2,
+              crossAxisCount: 3,
+            ),
+            itemCount: lenghtCategory.length > 6 ? 6 : lenghtCategory.length, //! untuk mengatur jumlah item, jika lebih dari 6 maka jumlahnya 6
+            itemBuilder: (context, index) {
+              var item = lenghtCategory[index];
+              if (index == 5) { //! menampilkan icon more pada akhir grid
+                return IconButton(
+                    icon: Icon(
+                      Icons.more_horiz,
+                      size: getValueForScreenType<double>(context: context, mobile: 20.0, tablet: 30.0, desktop: 50.0),
+                      color: Colors.blue,
+                    ),
+                    onPressed: () => _bottomSheet(context: context, lenghtCategory: lenghtCategory));
+              } else { //! menampilkan nama kategori
+                return ButtonText(
+                    context: context,
                     text: item.categories.name,
                     icon: Icons.category,
                     onPress: () {});
