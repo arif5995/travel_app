@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:travelapp/core/bloc/category_bloc.dart';
@@ -73,17 +74,48 @@ class _LayoutBodyState extends State<LayoutBody> {
                        if (snapshot.hasData){
                          if (snapshot.data is RestorantSuccess){
                            final data =  snapshot.data as RestorantSuccess;
-                           return ListView.builder(
-                               itemCount: data.restorant.length,
-                               itemBuilder: (context, index) {
-                                 var item = data.restorant[index];
-                                 return ItemCard(
-                                   txtPicture: item.restaurant.thumb,
-                                   txtPlaceName: item.restaurant.name,
-                                   txtAlamat: item.restaurant.location.address,
-                                    rating: double.parse(item.restaurant.userRating.aggregateRating));
-                               }
-                           );
+                           return ResponsiveBuilder(
+                              builder: (context, sizingInformation){
+                                switch (sizingInformation.deviceScreenType){
+                                  case DeviceScreenType.mobile:
+                                    return  ListView.builder(
+                                          itemCount: data.restorant.length,
+                                          itemBuilder: (context, index) {
+                                            var item = data.restorant[index];
+                                            return ItemCard(
+                                              txtPicture: item.restaurant.thumb,
+                                              txtPlaceName: item.restaurant.name,
+                                              txtAlamat: item.restaurant.location.address,
+                                                rating: double.parse(item.restaurant.userRating.aggregateRating));
+                                          }
+                                      );
+                                    break;
+                                  case DeviceScreenType.desktop:
+                                    return  GridView.builder(
+                                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                        childAspectRatio: 2 / 1,
+                                        crossAxisSpacing: 2,
+                                        crossAxisCount: 2,
+                                      ),
+                                        itemCount: data.restorant.length,
+                                        itemBuilder: (context, index){
+                                          var item = data.restorant[index];
+                                            return _itemRestoGrid(context: context, 
+                                            txtImg: item.restaurant.thumb,
+                                            txtCuisines: item.restaurant.cuisines,
+                                            txtLocation: item.restaurant.location.address,
+                                            txtNamePlace: item.restaurant.name,
+                                            txtTime: item.restaurant.timings,
+                                            txtRate: item.restaurant.userRating.aggregateRating);
+                                          
+                                        },
+                                    );
+                                    break;
+                                  default:
+                                    return Container();
+                                }
+                              },
+                            ); 
                          }else if (snapshot.data is RestorantError){
                            final error = snapshot.data as RestorantError;
                            return _buildError(message: error.error);
@@ -141,7 +173,6 @@ class _LayoutBodyState extends State<LayoutBody> {
                           return Container();
                         }),
                   ),
-                  //OptionsCards(txtBtnDialog: "SIGN ME UP"),
                 ),
               ),
             ),
@@ -186,7 +217,7 @@ Widget _cardHome({List<Category> lenghtCategory, BuildContext context}) {
                 return IconButton(
                     icon: Icon(
                       Icons.more_horiz,
-                      size: getValueForScreenType<double>(context: context, mobile: 20.0, tablet: 30.0, desktop: 50.0),
+                      size: 20.0,
                       color: Colors.blue,
                     ),
                     onPressed: () => _bottomSheet(context: context, lenghtCategory: lenghtCategory));
@@ -209,15 +240,15 @@ Widget _cardHome1({List<Category> lenghtCategory, BuildContext context}) {
   return Padding(
     padding: const EdgeInsets.all(5.0),
     child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         Expanded(
-          child: GridView.builder(
+           child: GridView.builder(
             physics: NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 16 / 8,
+              childAspectRatio: 8.5,
               crossAxisSpacing: 2,
               crossAxisCount: 3,
             ),
@@ -228,19 +259,47 @@ Widget _cardHome1({List<Category> lenghtCategory, BuildContext context}) {
                 return IconButton(
                     icon: Icon(
                       Icons.more_horiz,
-                      size: getValueForScreenType<double>(context: context, mobile: 20.0, tablet: 30.0, desktop: 50.0),
+                      size: 20.0,
                       color: Colors.blue,
                     ),
                     onPressed: () => _bottomSheet(context: context, lenghtCategory: lenghtCategory));
               } else { //! menampilkan nama kategori
-                return ButtonText(
-                    context: context,
-                    text: item.categories.name,
-                    icon: Icons.category,
-                    onPress: () {});
+                return Container(
+                  child: ButtonText(
+                      context: context,
+                      text: item.categories.name,
+                      icon: Icons.category,
+                      onPress: () {}),
+                );
               }
             },
           ),
+          // child: StaggeredGridView.countBuilder(
+          //   crossAxisCount: 2,
+          //   mainAxisSpacing: 50,
+          //   staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
+          //   physics: NeverScrollableScrollPhysics(),
+          //   scrollDirection: Axis.horizontal,
+          //   itemCount: lenghtCategory.length > 6 ? 6 :lenghtCategory.length,
+          //   itemBuilder: (context, index) {
+          //     var item = lenghtCategory[index];
+          //     if (index == 5) { //! menampilkan icon more pada akhir grid
+          //       return IconButton(
+          //           icon: Icon(
+          //             Icons.more_horiz,
+          //             size: 20.0,
+          //             color: Colors.blue,
+          //           ),
+          //           onPressed: () => _bottomSheet(context: context, lenghtCategory: lenghtCategory));
+          //     } else { //! menampilkan nama kategori
+          //       return ButtonText(
+          //           context: context,
+          //           text: item.categories.name,
+          //           icon: Icons.category,
+          //           onPress: () {});
+          //     }
+          //   },
+          // )
         ),
       ],
     ),
@@ -299,4 +358,78 @@ Widget _bottomSheet({BuildContext context, List<Category> lenghtCategory}) {
           ]),
         );
       });
+}
+
+Widget _itemRestoGrid({BuildContext context, String txtImg, String txtCuisines, String txtNamePlace, String txtRate, String txtLocation, txtTime}){
+  return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      child: Container(
+        child: Card(
+           shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            ),
+            child: Column(
+              children: [
+            Container(
+              height: 200,
+              child: new Stack(
+              children: <Widget>[
+               Image.network(
+                  txtImg,
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.width / 2,
+                    fit: BoxFit.cover,
+                ),
+                new Positioned(
+                  bottom: 20,
+                  right: 15,
+                  child: Container(
+                    width: 300,
+                    color: Colors.red,
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Text(
+                          txtCuisines,
+                          style: TextStyle(fontSize: 26, color: Colors.white),
+                        ),
+                        Text(
+                          txtTime, style: TextStyle(fontSize: 15, color: Colors.grey),
+                          softWrap: true,
+                          overflow: TextOverflow.fade,
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              ],
+          ),
+            ),
+          SizedBox(height: 10,),
+          Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: Row(
+                    children: <Widget>[
+                      new Icon(Icons.restaurant, size: 20),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: new Text(
+                          txtNamePlace, style: TextStyle(fontSize: 20, ),
+                        ),
+                      ),
+                    
+                    ],
+                  ),
+                ),
+                new Text(txtLocation, style: TextStyle(fontSize: 15,),)
+              ],
+            ),
+              ],
+            ),
+        ),
+      ),
+  );
 }
