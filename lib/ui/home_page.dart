@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -49,6 +50,7 @@ class _LayoutBodyState extends State<LayoutBody> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context);
     return SafeArea(
       child: Stack(
         children: <Widget>[
@@ -100,7 +102,30 @@ class _LayoutBodyState extends State<LayoutBody> {
                                         itemCount: data.restorant.length,
                                         itemBuilder: (context, index){
                                           var item = data.restorant[index];
-                                            return _itemRestoGrid(context: context, 
+                                            return _itemRestoGrid(context: context,
+                                            sizeHPoto: 500, 
+                                            txtImg: item.restaurant.thumb,
+                                            txtCuisines: item.restaurant.cuisines,
+                                            txtLocation: item.restaurant.location.address,
+                                            txtNamePlace: item.restaurant.name,
+                                            txtTime: item.restaurant.timings,
+                                            txtRate: item.restaurant.userRating.aggregateRating);
+                                          
+                                        },
+                                    );
+                                    break;
+                                    case DeviceScreenType.tablet:
+                                    return  GridView.builder(
+                                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                        childAspectRatio: 2 / 1,
+                                        crossAxisSpacing: 2,
+                                        crossAxisCount: 2,
+                                      ),
+                                        itemCount: data.restorant.length,
+                                        itemBuilder: (context, index){
+                                          var item = data.restorant[index];
+                                            return _itemRestoGrid(context: context,
+                                            sizeHPoto: 250, 
                                             txtImg: item.restaurant.thumb,
                                             txtCuisines: item.restaurant.cuisines,
                                             txtLocation: item.restaurant.location.address,
@@ -136,7 +161,7 @@ class _LayoutBodyState extends State<LayoutBody> {
             top: MediaQuery.of(context).size.height * 0.10,
             child: Container(
               width: MediaQuery.of(context).size.width,
-              height: 150,
+              height: 420.h,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Card(
@@ -157,9 +182,12 @@ class _LayoutBodyState extends State<LayoutBody> {
                               builder: (context, sizingInformation){
                                 switch (sizingInformation.deviceScreenType){
                                   case DeviceScreenType.mobile:
-                                    return  _cardHome(lenghtCategory: data.list, context: context);
+                                    return  _cardHome1(lenghtCategory: data.list, context: context);
                                     break;
                                   case DeviceScreenType.desktop:
+                                    return  _cardHome1(lenghtCategory: data.list, context: context);
+                                    break;
+                                  case DeviceScreenType.tablet:
                                     return  _cardHome1(lenghtCategory: data.list, context: context);
                                     break;
                                   default:
@@ -237,69 +265,58 @@ Widget _cardHome({List<Category> lenghtCategory, BuildContext context}) {
 }
 
 Widget _cardHome1({List<Category> lenghtCategory, BuildContext context}) {
-  return Padding(
-    padding: const EdgeInsets.all(5.0),
+  return Container(
+    padding: EdgeInsets.all(8),
+    width: MediaQuery.of(context).size.width,
+    height: MediaQuery.of(context).size.height,
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         Expanded(
-           child: GridView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 8.5,
-              crossAxisSpacing: 2,
-              crossAxisCount: 3,
-            ),
-            itemCount: lenghtCategory.length > 6 ? 6 : lenghtCategory.length, //! untuk mengatur jumlah item, jika lebih dari 6 maka jumlahnya 6
-            itemBuilder: (context, index) {
-              var item = lenghtCategory[index];
-              if (index == 5) { //! menampilkan icon more pada akhir grid
-                return IconButton(
-                    icon: Icon(
-                      Icons.more_horiz,
-                      size: 20.0,
-                      color: Colors.blue,
-                    ),
-                    onPressed: () => _bottomSheet(context: context, lenghtCategory: lenghtCategory));
-              } else { //! menampilkan nama kategori
-                return Container(
-                  child: ButtonText(
-                      context: context,
-                      text: item.categories.name,
-                      icon: Icons.category,
-                      onPress: () {}),
-                );
-              }
-            },
+           child: Center(
+             child: GridView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                childAspectRatio: getValueForScreenType<double>(
+                context: context,
+                mobile: 3,
+                tablet: 7.2,
+                desktop: 8.5,
+              ),
+                crossAxisSpacing: getValueForScreenType<double>(
+                context: context,
+                mobile: 4,
+                tablet: 7,
+                desktop: 10,
+              ),
+                crossAxisCount: 3,
+              ),
+              itemCount: lenghtCategory.length > 6 ? 6 : lenghtCategory.length, //! untuk mengatur jumlah item, jika lebih dari 6 maka jumlahnya 6
+              itemBuilder: (context, index) {
+                var item = lenghtCategory[index];
+                if (index == 5) { //! menampilkan icon more pada akhir grid
+                  return IconButton(
+                      icon: Icon(
+                        Icons.more_horiz,
+                        size: 20.0,
+                        color: Colors.blue,
+                      ),
+                      onPressed: () => _bottomSheet(context: context, lenghtCategory: lenghtCategory));
+                } else { //! menampilkan nama kategori
+                  return Container(
+                    child: ButtonText(
+                        context: context,
+                        sizeFont: 15,
+                        text: item.categories.name,
+                        icon: Icons.category,
+                        onPress: () {}),
+                  );
+                }
+              },
           ),
-          // child: StaggeredGridView.countBuilder(
-          //   crossAxisCount: 2,
-          //   mainAxisSpacing: 50,
-          //   staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
-          //   physics: NeverScrollableScrollPhysics(),
-          //   scrollDirection: Axis.horizontal,
-          //   itemCount: lenghtCategory.length > 6 ? 6 :lenghtCategory.length,
-          //   itemBuilder: (context, index) {
-          //     var item = lenghtCategory[index];
-          //     if (index == 5) { //! menampilkan icon more pada akhir grid
-          //       return IconButton(
-          //           icon: Icon(
-          //             Icons.more_horiz,
-          //             size: 20.0,
-          //             color: Colors.blue,
-          //           ),
-          //           onPressed: () => _bottomSheet(context: context, lenghtCategory: lenghtCategory));
-          //     } else { //! menampilkan nama kategori
-          //       return ButtonText(
-          //           context: context,
-          //           text: item.categories.name,
-          //           icon: Icons.category,
-          //           onPress: () {});
-          //     }
-          //   },
-          // )
+           ),
         ),
       ],
     ),
@@ -360,7 +377,8 @@ Widget _bottomSheet({BuildContext context, List<Category> lenghtCategory}) {
       });
 }
 
-Widget _itemRestoGrid({BuildContext context, String txtImg, String txtCuisines, String txtNamePlace, String txtRate, String txtLocation, txtTime}){
+Widget _itemRestoGrid({BuildContext context, int sizeHPoto, String txtImg, String txtCuisines, String txtNamePlace, String txtRate, String txtLocation, txtTime}){
+  ScreenUtil.init(context);
   return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Container(
@@ -371,20 +389,19 @@ Widget _itemRestoGrid({BuildContext context, String txtImg, String txtCuisines, 
             child: Column(
               children: [
             Container(
-              height: 200,
               child: new Stack(
               children: <Widget>[
                Image.network(
                   txtImg,
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.width / 2,
+                    width: MediaQuery.of(context).size.width,
+                    height: ScreenUtil().setHeight(sizeHPoto),
                     fit: BoxFit.cover,
                 ),
                 new Positioned(
-                  bottom: 20,
+                  bottom: ScreenUtil().setHeight(20),
                   right: 15,
                   child: Container(
-                    width: 300,
+                    width: MediaQuery.of(context).size.width * 1,
                     color: Colors.red,
                     padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                     child: Column(
@@ -392,10 +409,10 @@ Widget _itemRestoGrid({BuildContext context, String txtImg, String txtCuisines, 
                       children: <Widget>[
                         Text(
                           txtCuisines,
-                          style: TextStyle(fontSize: 26, color: Colors.white),
+                          style: TextStyle(fontSize: ScreenUtil().setSp(26), color: Colors.white),
                         ),
                         Text(
-                          txtTime, style: TextStyle(fontSize: 15, color: Colors.grey),
+                          txtTime, style: TextStyle(fontSize: ScreenUtil().setSp(15), color: Colors.grey),
                           softWrap: true,
                           overflow: TextOverflow.fade,
                         )
@@ -406,7 +423,7 @@ Widget _itemRestoGrid({BuildContext context, String txtImg, String txtCuisines, 
               ],
           ),
             ),
-          SizedBox(height: 10,),
+          SizedBox(height: ScreenUtil().setHeight(10),),
           Column(
               children: <Widget>[
                 Padding(
@@ -417,14 +434,19 @@ Widget _itemRestoGrid({BuildContext context, String txtImg, String txtCuisines, 
                       Padding(
                         padding: const EdgeInsets.only(left: 10),
                         child: new Text(
-                          txtNamePlace, style: TextStyle(fontSize: 20, ),
+                          txtNamePlace, style: TextStyle(fontSize: ScreenUtil().setSp(20), ),
                         ),
                       ),
                     
                     ],
                   ),
                 ),
-                new Text(txtLocation, style: TextStyle(fontSize: 15,),)
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: new Text(txtLocation, style: TextStyle(fontSize: ScreenUtil().setSp(15),), overflow: TextOverflow.ellipsis,),
+                  ))
               ],
             ),
               ],

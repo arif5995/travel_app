@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-Widget ButtonText({BuildContext context, String text, IconData icon, GestureTapCallback onPress}) {
+Widget ButtonText({BuildContext context,int sizeFont, String text, IconData icon, GestureTapCallback onPress}) {
+  ScreenUtil.init(context);
   return Container(
-    padding: EdgeInsets.all(5),
     child: Center(
       child: RawMaterialButton(
         onPressed: onPress,
@@ -22,13 +23,13 @@ Widget ButtonText({BuildContext context, String text, IconData icon, GestureTapC
                   size: 20.0,
                 ),
                 SizedBox(
-                  width: 5,
+                  width: 5.0 .w,
                 ),
                 Flexible(
                   child: Text(
                     text,
                     overflow: TextOverflow.ellipsis ,
-                    style: TextStyle(color: Colors.blue, fontSize: 12.0,),
+                    style: TextStyle(color: Colors.blue, fontSize: ScreenUtil().setSp(sizeFont),),
                   ),
                 ),
               ],
