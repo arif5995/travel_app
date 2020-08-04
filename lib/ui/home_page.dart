@@ -161,9 +161,14 @@ class _LayoutBodyState extends State<LayoutBody> {
             top: MediaQuery.of(context).size.height * 0.10,
             child: Container(
               width: MediaQuery.of(context).size.width,
-              height: 420.h,
+              height: 450.h,
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(getValueForScreenType(
+                context: context,
+                mobile: 10,
+                tablet: 15,
+                desktop: 20,
+              )),
                 child: Card(
                   shape: RoundedRectangleBorder(
                       borderRadius:
@@ -182,13 +187,13 @@ class _LayoutBodyState extends State<LayoutBody> {
                               builder: (context, sizingInformation){
                                 switch (sizingInformation.deviceScreenType){
                                   case DeviceScreenType.mobile:
-                                    return  _cardHome1(lenghtCategory: data.list, context: context);
+                                    return  _cardHome(lenghtCategory: data.list, context: context);
                                     break;
                                   case DeviceScreenType.desktop:
-                                    return  _cardHome1(lenghtCategory: data.list, context: context);
+                                    return   _cardHome1(lenghtCategory: data.list, context: context);
                                     break;
                                   case DeviceScreenType.tablet:
-                                    return  _cardHome1(lenghtCategory: data.list, context: context);
+                                    return   _cardHome1(lenghtCategory: data.list, context: context);
                                     break;
                                   default:
                                     return Container();
@@ -223,46 +228,52 @@ class _LayoutBodyState extends State<LayoutBody> {
 }
 
 Widget _cardHome({List<Category> lenghtCategory, BuildContext context}) {
-  return Padding(
-    padding: const EdgeInsets.all(5.0),
+  return Container(
+    padding: EdgeInsets.all(8),
+    width: MediaQuery.of(context).size.width,
+    height: MediaQuery.of(context).size.height,
     child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         Expanded(
-          child: GridView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 2 / 1,
-              crossAxisSpacing: 2,
-              crossAxisCount: 3,
-            ),
-            itemCount: lenghtCategory.length > 6 ? 6 : lenghtCategory.length, //! untuk mengatur jumlah item, jika lebih dari 6 maka jumlahnya 6
-            itemBuilder: (context, index) {
-              var item = lenghtCategory[index];
-              if (index == 5) { //! menampilkan icon more pada akhir grid
-                return IconButton(
-                    icon: Icon(
-                      Icons.more_horiz,
-                      size: 20.0,
-                      color: Colors.blue,
-                    ),
-                    onPressed: () => _bottomSheet(context: context, lenghtCategory: lenghtCategory));
-              } else { //! menampilkan nama kategori
-                return ButtonText(
-                    context: context,
-                    text: item.categories.name,
-                    icon: Icons.category,
-                    onPress: () {});
-              }
-            },
+           child: Center(
+             child: GridView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                childAspectRatio: 2/1,
+                crossAxisSpacing: 2,
+                crossAxisCount: 3,
+              ),
+              itemCount: lenghtCategory.length > 6 ? 6 : lenghtCategory.length, //! untuk mengatur jumlah item, jika lebih dari 6 maka jumlahnya 6
+              itemBuilder: (context, index) {
+                var item = lenghtCategory[index];
+                if (index == 5) { //! menampilkan icon more pada akhir grid
+                  return IconButton(
+                      icon: Icon(
+                        Icons.more_horiz,
+                        size: 20.0,
+                        color: Colors.blue,
+                      ),
+                      onPressed: () => _bottomSheet(context: context, lenghtCategory: lenghtCategory));
+                } else { //! menampilkan nama kategori
+                  return Container(
+                    child: ButtonText(
+                        text: item.categories.name,
+                        icon: Icons.category,
+                        onPress: () {}),
+                  );
+                }
+              },
           ),
+           ),
         ),
       ],
     ),
   );
 }
+
 
 Widget _cardHome1({List<Category> lenghtCategory, BuildContext context}) {
   return Container(
@@ -281,22 +292,17 @@ Widget _cardHome1({List<Category> lenghtCategory, BuildContext context}) {
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 childAspectRatio: getValueForScreenType<double>(
                 context: context,
-                mobile: 3,
-                tablet: 7.2,
-                desktop: 8.5,
-              ),
-                crossAxisSpacing: getValueForScreenType<double>(
-                context: context,
-                mobile: 4,
+                mobile: 2/1,
                 tablet: 7,
-                desktop: 10,
+                desktop: 14,
               ),
+                crossAxisSpacing: 3,
                 crossAxisCount: 3,
               ),
-              itemCount: lenghtCategory.length > 6 ? 6 : lenghtCategory.length, //! untuk mengatur jumlah item, jika lebih dari 6 maka jumlahnya 6
+              itemCount: lenghtCategory.length > 9 ? 9 : lenghtCategory.length, //! untuk mengatur jumlah item, jika lebih dari 6 maka jumlahnya 6
               itemBuilder: (context, index) {
                 var item = lenghtCategory[index];
-                if (index == 5) { //! menampilkan icon more pada akhir grid
+                if (index == 8) { //! menampilkan icon more pada akhir grid
                   return IconButton(
                       icon: Icon(
                         Icons.more_horiz,
@@ -307,8 +313,6 @@ Widget _cardHome1({List<Category> lenghtCategory, BuildContext context}) {
                 } else { //! menampilkan nama kategori
                   return Container(
                     child: ButtonText(
-                        context: context,
-                        sizeFont: 15,
                         text: item.categories.name,
                         icon: Icons.category,
                         onPress: () {}),
@@ -322,6 +326,8 @@ Widget _cardHome1({List<Category> lenghtCategory, BuildContext context}) {
     ),
   );
 }
+
+
 
 Widget _bottomSheet({BuildContext context, List<Category> lenghtCategory}) {
   showModalBottomSheet(
