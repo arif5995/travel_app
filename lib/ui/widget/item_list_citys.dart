@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-Container ItemListCitys({String itemImg, String itemTitle}){
+Container ItemListCitys({BuildContext context, String itemImg, String itemTitle}){
+  ScreenUtil.init(context);
   return Container(
-    height: 150,
+    height: 450.h,
     decoration: BoxDecoration(
       image: DecorationImage(
         image: NetworkImage(itemImg),
@@ -16,7 +18,7 @@ Container ItemListCitys({String itemImg, String itemTitle}){
       color: Colors.grey,
     ),
     child: Center(
-      child: Text(itemTitle, style: TextStyle(fontSize: 30, color: Colors.white70),),
+      child: Text(itemTitle, style: TextStyle(fontSize: ScreenUtil().setSp(40, allowFontScalingSelf: true), color: Colors.white70),),
     ),
   );
 }
