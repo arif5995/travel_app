@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
-Container SearchText({TextEditingController controller, Function onChange, Function onPress }){
+Container SearchText({BuildContext context, TextEditingController controller, Function onChange, Function onPress }){
   return Container(
       alignment: Alignment.center,
       height: 60,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: getValueForScreenType(
+                                  context: context,
+                                  mobile: 10,
+                                  tablet: 10,
+                                  desktop: 20
+                                )),
       child: Card(
         shape: RoundedRectangleBorder(
             borderRadius:

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 Widget ButtonText({String text, IconData icon, GestureTapCallback onPress}) {
   return Container(
-    padding: EdgeInsets.all(5),
     child: Center(
       child: RawMaterialButton(
         onPressed: onPress,
@@ -19,16 +18,16 @@ Widget ButtonText({String text, IconData icon, GestureTapCallback onPress}) {
                 Icon(
                   icon,
                   color: Colors.blue,
-                  size: 20,
+                  size: 20.0,
                 ),
                 SizedBox(
-                  width: 5,
+                  width: 5.0,
                 ),
                 Flexible(
                   child: Text(
                     text,
                     overflow: TextOverflow.ellipsis ,
-                    style: TextStyle(color: Colors.blue, fontSize: 12),
+                    style: TextStyle(color: Colors.blue, fontSize: 12,),
                   ),
                 ),
               ],

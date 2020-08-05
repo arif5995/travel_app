@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 import 'package:travelapp/core/bloc/collections_bloc.dart';
 import 'package:travelapp/core/model/toursMdl.dart';
 import 'package:travelapp/ui/widget/appbar.dart';
@@ -105,10 +106,20 @@ class _LayoutBodyCityState extends State<LayoutBodyCity> {
                         physics: ClampingScrollPhysics(),
                         itemBuilder: (context, index) {
                           var item = data.collection[index];
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 20),
-                            child: ItemListCitys(
+                          return Container(
+                                padding: EdgeInsets.symmetric(horizontal: getValueForScreenType(
+                                  context: context,
+                                  mobile: 10,
+                                  tablet: 10,
+                                  desktop: 10
+                                ), vertical: getValueForScreenType(
+                                  context: context,
+                                  mobile: 10,
+                                  tablet: 10,
+                                  desktop: 10
+                                )),
+                                child: ItemListCitys(
+                                context: context,
                                 itemImg: item.collection.imageUrl,
                                 itemTitle: item.collection.title),
                           );
@@ -132,6 +143,7 @@ class _LayoutBodyCityState extends State<LayoutBodyCity> {
           right: 0.0,
           left: 0.0,
           child: SearchText(
+              context: context,
               controller: controllerSearch,
               onChange: onSearch,
               onPress: () {
